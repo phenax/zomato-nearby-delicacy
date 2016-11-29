@@ -110,4 +110,29 @@ export default class GoogleMaps {
 			this.marker[index]= null;
 		}
 	}
+
+
+
+	getCoordinates() {
+
+		return new Promise((resolve, reject) => {
+
+			if ('geolocation' in navigator) {
+
+				navigator.geolocation.getCurrentPosition(
+					(position) => {
+
+						resolve(position);
+					},
+					(e) => {
+
+						reject(e);
+					}
+				);
+
+			} else {
+				reject(new Error('Geolocation Not Supported'));
+			}
+		});
+	}
 }

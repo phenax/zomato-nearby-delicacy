@@ -61,71 +61,11 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_knockout__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__libs_GoogleMaps__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__libs_Utils__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_fend_map__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_fend_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_fend_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_fend_sidebar__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_fend_sidebar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_fend_sidebar__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_fend_sidebar_list__ = __webpack_require__(7);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_fend_sidebar_list___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_fend_sidebar_list__);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
-
-
-
-
-
-// All components
-
-
-
-
-var RootViewModel = function RootViewModel() {
-	var _this = this;
-
-	_classCallCheck(this, RootViewModel);
-
-	this.title = 'Nearby Restaurants';
-	this.loading = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observable(true);
-
-
-	var map = new __WEBPACK_IMPORTED_MODULE_1__libs_GoogleMaps__["a" /* default */]();
-
-	map.ready(function () {
-
-		var $hook = document.getElementById('fendMap');
-
-		if ($hook === null) {
-			__WEBPACK_IMPORTED_MODULE_2__libs_Utils__["a" /* default */].error('An Error occured. Try reloading the page.');
-		}
-
-		var center = {
-			lat: 40.836852,
-			lng: -73.832632
-		};
-
-		map.createMap(center, $hook, 5);
-
-		_this.loading(false);
-	});
-};
-
-__WEBPACK_IMPORTED_MODULE_0_knockout___default.a.applyBindings(new RootViewModel());
-
-/***/ },
-/* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -6025,8 +5965,7 @@ ko.exportSymbol('nativeTemplateEngine', ko.nativeTemplateEngine);
 
 
 /***/ },
-/* 2 */,
-/* 3 */
+/* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6043,33 +5982,31 @@ var SidebarList = function SidebarList() {
 };
 
 /***/ },
-/* 4 */,
-/* 5 */
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_knockout__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__viewmodels_Sidebar__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__viewmodels_MapVM__ = __webpack_require__(7);
 
 
 
 
 
-__WEBPACK_IMPORTED_MODULE_0_knockout___default.a.components.register('fend-sidebar', {
-	viewModel: __WEBPACK_IMPORTED_MODULE_1__viewmodels_Sidebar__["a" /* Sidebar */],
-	template: '\n\t\t<div class=\'sidebar__wrap\'>\n\t\t\tBookheimekhan\n\n\t\t\t<fend-sidebar-list></fend-sidebar-list>\n\t\t</div>\n\t'
+__WEBPACK_IMPORTED_MODULE_0_knockout___default.a.components.register('fend-map', {
+	viewModel: __WEBPACK_IMPORTED_MODULE_1__viewmodels_MapVM__["a" /* MapVM */],
+	template: '<div class="map" id="fendMap"></div>'
 });
 
 /***/ },
-/* 6 */,
-/* 7 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_knockout__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__viewmodels_Sidebar__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__viewmodels_Sidebar__ = __webpack_require__(1);
 
 
 
@@ -6081,37 +6018,25 @@ __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.components.register('fend-sideb
 });
 
 /***/ },
-/* 8 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_knockout__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__viewmodels_MapVM__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__viewmodels_Sidebar__ = __webpack_require__(1);
 
 
 
 
 
-__WEBPACK_IMPORTED_MODULE_0_knockout___default.a.components.register('fend-map', {
-	viewModel: __WEBPACK_IMPORTED_MODULE_1__viewmodels_MapVM__["a" /* MapVM */],
-	template: '\n\t\t<div class=\'map\' id=\'fendMap\'>\n\t\t\tThis is map\n\t\t</div>\n\t'
+__WEBPACK_IMPORTED_MODULE_0_knockout___default.a.components.register('fend-sidebar', {
+	viewModel: __WEBPACK_IMPORTED_MODULE_1__viewmodels_Sidebar__["a" /* Sidebar */],
+	template: '\n\t\t<div class=\'sidebar__wrap\'>\n\t\t\tBookheimekhan\n\n\t\t\t<fend-sidebar-list></fend-sidebar-list>\n\t\t</div>\n\t'
 });
 
 /***/ },
-/* 9 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return MapVM; });
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var MapVM = function MapVM() {
-  _classCallCheck(this, MapVM);
-};
-
-/***/ },
-/* 10 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6225,13 +6150,32 @@ var GoogleMaps = function () {
 		}
 	};
 
+	GoogleMaps.prototype.getCoordinates = function getCoordinates() {
+
+		return new Promise(function (resolve, reject) {
+
+			if ('geolocation' in navigator) {
+
+				navigator.geolocation.getCurrentPosition(function (position) {
+
+					resolve(position);
+				}, function (e) {
+
+					reject(e);
+				});
+			} else {
+				reject(new Error('Geolocation Not Supported'));
+			}
+		});
+	};
+
 	return GoogleMaps;
 }();
 
 /* harmony default export */ exports["a"] = GoogleMaps;
 
 /***/ },
-/* 11 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6259,6 +6203,95 @@ var Utils = function () {
 }();
 
 /* harmony default export */ exports["a"] = Utils;
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_knockout__);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return MapVM; });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var MapVM = function MapVM() {
+	_classCallCheck(this, MapVM);
+};
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_knockout__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__libs_GoogleMaps__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__libs_Utils__ = __webpack_require__(6);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_fend_map__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_fend_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_fend_map__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_fend_sidebar__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_fend_sidebar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_fend_sidebar__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_fend_sidebar_list__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_fend_sidebar_list___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_fend_sidebar_list__);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+
+
+
+
+// All components
+
+
+
+
+var RootViewModel = function () {
+	function RootViewModel() {
+		var _this = this;
+
+		_classCallCheck(this, RootViewModel);
+
+		this.title = 'Nearby Restaurants';
+		this.loading = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observable(true);
+
+
+		var map = new __WEBPACK_IMPORTED_MODULE_1__libs_GoogleMaps__["a" /* default */]();
+
+		map.ready(function () {
+
+			map.getCoordinates().then(function (coord) {
+				_this._mapInit(coord, map);
+			}).catch(function (e) {
+				__WEBPACK_IMPORTED_MODULE_2__libs_Utils__["a" /* default */].error(e);
+			});
+		});
+	}
+
+	RootViewModel.prototype._mapInit = function _mapInit(coord, map) {
+
+		var $hook = document.getElementById('fendMap');
+
+		if ($hook === null) {
+			__WEBPACK_IMPORTED_MODULE_2__libs_Utils__["a" /* default */].error('An Error occured. Try reloading the page.');
+		}
+
+		var center = {
+			lat: coord.coords.latitude,
+			lng: coord.coords.longitude
+		};
+
+		map.createMap(center, $hook, 10);
+
+		this.loading(false);
+	};
+
+	return RootViewModel;
+}();
+
+__WEBPACK_IMPORTED_MODULE_0_knockout___default.a.applyBindings(new RootViewModel());
 
 /***/ }
 /******/ ]);

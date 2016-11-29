@@ -23,21 +23,33 @@ class RootViewModel {
 
 		map.ready(() => {
 
-			let $hook= document.getElementById('fendMap');
-
-			if($hook === null) {
-				Utils.error('An Error occured. Try reloading the page.');
-			}
-
-			const center= {
-				lat: 40.836852,
-				lng: -73.832632
-			};
-
-			map.createMap(center, $hook, 5);
-
-			this.loading(false);
+			map.getCoordinates()
+				.then((coord) => {
+					this._mapInit(coord, map);
+				})
+				.catch((e) => {
+					Utils.error(e);
+				});
 		});
+	}
+
+
+	_mapInit(coord, map) {
+
+		let $hook= document.getElementById('fendMap');
+
+		if($hook === null) {
+			Utils.error('An Error occured. Try reloading the page.');
+		}
+
+		const center= {
+			lat: coord.coords.latitude,
+			lng: coord.coords.longitude
+		};
+
+		map.createMap(center, $hook, 10);
+
+		this.loading(false);
 	}
 }
 

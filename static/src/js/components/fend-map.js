@@ -5,9 +5,5 @@ import { MapVM } from '../viewmodels/MapVM';
 
 ko.components.register('fend-map', {
 	viewModel: MapVM,
-	template: `
-		<div class='map' id='fendMap'>
-			This is map
-		</div>
-	`
+	template: '<div class="map" id="fendMap"></div>'
 });
