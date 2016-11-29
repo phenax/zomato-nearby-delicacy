@@ -1,0 +1,22 @@
+$font: "Helvetica", "Lato", "sans-serif", "Arial";
+$primary_text_color: #555;
+$root_font_size: 16px;
+
+:root {
+	font-size:$root_font_size;
+	color: $primary_text_color;
+	font-family: $font;
+}
+
+html, body {
+	margin:0;
+	padding:0;
+}
+
+* {
+	box-sizing: border-box;
+	
+	&::after, &::before {
+		content: " ";
+	}
+}
