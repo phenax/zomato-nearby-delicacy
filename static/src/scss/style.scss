@@ -1,22 +1,57 @@
-$font: "Helvetica", "Lato", "sans-serif", "Arial";
-$primary_text_color: #555;
-$root_font_size: 16px;
 
-:root {
-	font-size:$root_font_size;
-	color: $primary_text_color;
-	font-family: $font;
-}
+@import 'default';
 
-html, body {
-	margin:0;
-	padding:0;
-}
+.header {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 10;
 
-* {
-	box-sizing: border-box;
-	
-	&::after, &::before {
-		content: " ";
+	color: #fff;
+	background-color: $color_primary;
+
+	box-shadow: 0 0 10px 3px rgba(0,0,0,.4);
+
+	$spinnerSize: 1.6em;
+	$btnPadding: .8em;
+
+	&__menubtn {
+		color: currentColor;
+		font-size: 1.4em;
+		padding: #{$btnPadding};
+		background-color: transparent;
 	}
+
+	&__title {
+		display: inline-block;
+		text-transform: uppercase;
+	}
+
+	&__loading {
+
+		position: absolute;
+		right: 1em;
+		top: 1em;
+
+		width: $spinnerSize;
+		height: $spinnerSize;
+		border-radius: 50%;
+		border: 3px solid transparent;
+		border-left-color: #fff;
+
+		will-change: transform;
+		contain: strict;
+		animation: spinner .5s linear infinite;
+	}
+}
+
+
+
+
+.map {
+	margin-top: 4vh;
+	min-height: 90vh;
+	position: relative;
+	z-index: 0;
 }

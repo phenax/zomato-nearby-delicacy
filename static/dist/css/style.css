@@ -1,13 +1,112 @@
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline; }
+
+/* HTML5 display-role reset for older browsers */
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block; }
+
+body {
+  line-height: 1; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+  content: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+a {
+  text-decoration: none; }
+
+button {
+  cursor: pointer;
+  outline: none;
+  border: none; }
+
 :root {
   font-size: 16px;
   color: #555;
-  font-family: "Helvetica", "Lato", "sans-serif", "Arial"; }
-
-html, body {
-  margin: 0;
-  padding: 0; }
+  font-family: "Roboto", "Helvetica", "sans-serif";
+  line-height: 1.12em; }
 
 * {
   box-sizing: border-box; }
-  *::after, *::before {
-    content: " "; }
+
+@keyframes spinner {
+  from {
+    transform: rotate(0); }
+  to {
+    transform: rotate(360deg); } }
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+  color: #fff;
+  background-color: #3f51b5;
+  box-shadow: 0 0 10px 3px rgba(0, 0, 0, 0.4); }
+  .header__menubtn {
+    color: currentColor;
+    font-size: 1.4em;
+    padding: 0.8em;
+    background-color: transparent; }
+  .header__title {
+    display: inline-block;
+    text-transform: uppercase; }
+  .header__loading {
+    position: absolute;
+    right: 1em;
+    top: 1em;
+    width: 1.6em;
+    height: 1.6em;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    border-left-color: #fff;
+    will-change: transform;
+    contain: strict;
+    animation: spinner .5s linear infinite; }
+
+.map {
+  margin-top: 4vh;
+  min-height: 90vh;
+  position: relative;
+  z-index: 0; }
