@@ -3,7 +3,7 @@ import ko from 'knockout';
 
 export class Sidebar {
 
-	isVisible= ko.observable(true);
+	isVisible= ko.observable(false);
 
 	openMenu() {
 		this.isVisible(true);

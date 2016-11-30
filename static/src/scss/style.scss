@@ -11,4 +11,75 @@
 	z-index: 0;
 }
 
+.message-box {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	z-index: 12;
 
+	font-size: .9em;
+	padding: 1em;
+	text-align: center;
+	color: #fff;
+
+	box-shadow: 0 0 20px 5px rgba(0,0,0,.2);
+
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity .2s ease-in-out;
+
+	&.show {
+		opacity: 1;
+	}
+
+	&.error {
+		background-color: #e74c3c;
+	}
+
+	&.info {
+		background-color: #2ecc71;
+	}
+}
+
+.info-window {
+	color: #555;
+	min-height: 200px;
+	width: 100%;
+
+	img {
+		display: block;
+		width: 100%;
+	}
+
+	&__ratings {
+		font-size: 1.8em;
+		text-align: right;
+		padding: 1em 0;
+	}
+
+	&__img {
+		padding: 1em;
+	}
+
+	&__title {
+		font-size: 2em;
+		text-align: center;
+		padding: 1em .5em;
+	}
+
+	&__address {
+		color: #777;
+		font-size: .9em;
+	}
+
+	&__menu {
+		padding: .5em 0;
+		font-size: 1.2em;
+		text-align: right;
+
+		a {
+			color: $color_primary;
+		}
+	}
+}

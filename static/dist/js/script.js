@@ -5981,7 +5981,7 @@ var Sidebar = function () {
 	function Sidebar() {
 		_classCallCheck(this, Sidebar);
 
-		this.isVisible = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observable(true);
+		this.isVisible = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observable(false);
 	}
 
 	Sidebar.prototype.openMenu = function openMenu() {
@@ -6126,33 +6126,49 @@ var GoogleMaps = function () {
 
 	GoogleMaps.prototype.addMarker = function addMarker(options) {
 
-		this.markers.push(new window.google.maps.Marker(_extends({
+		var marker = new window.google.maps.Marker(_extends({
 			map: this._map
-		}, options)));
+		}, options));
+
+		this.markers.push(marker);
+
+		return marker;
 	};
 
-	GoogleMaps.prototype.setMarker = function setMarker(index, position) {
+	GoogleMaps.prototype.fitMarkers = function fitMarkers() {
 
-		// TODO: Allow user to change the position 
-		if (this.marker[index]) {
-			this.marker[index].setPosition(position);
+		var bounds = new window.google.maps.LatLngBounds();
+
+		this.markers.forEach(function (marker) {
+			bounds.extend(marker.getPosition());
+		});
+
+		this._map.fitBounds(bounds);
+	};
+
+	GoogleMaps.prototype.window = function (_window) {
+		function window(_x) {
+			return _window.apply(this, arguments);
 		}
-	};
+
+		window.toString = function () {
+			return _window.toString();
+		};
+
+		return window;
+	}(function (content) {
+
+		return new window.google.maps.InfoWindow({
+			content: content
+		});
+	});
 
 	GoogleMaps.prototype.hideMarker = function hideMarker(index) {
-
-		// TODO: Fix this
-		if (this.marker[index]) {
-			this.marker[index] = null;
-		}
+		this.markers[index].setMap(null);
 	};
 
 	GoogleMaps.prototype.showMarker = function showMarker(index) {
-
-		// TODO: Fix this
-		if (!this.marker[index]) {
-			this.marker[index] = null;
-		}
+		this.markers[index].setMap(this._map);
 	};
 
 	GoogleMaps.prototype.getCoordinates = function getCoordinates() {
@@ -6188,23 +6204,48 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var $messageBox = document.querySelector('.js-message-box');
 
+$messageBox.addEventListener('click', function () {
+	Utils.hide();
+});
+
 var Utils = function () {
 	function Utils() {
 		_classCallCheck(this, Utils);
 	}
 
-	Utils.alert = function alert(color, message) {
-		console.log(color);
-		console.log(message);
+	Utils.hide = function hide() {
+
+		$messageBox.classList.remove('error');
+		$messageBox.classList.remove('info');
+
+		$messageBox.classList.remove('show');
+	};
+
+	Utils.delayHide = function delayHide(time) {
+
+		setTimeout(function () {
+			return Utils.hide();
+		}, time);
 	};
 
 	Utils.error = function error(message) {
-		console.error(message);
-		console.log($messageBox);
+
+		if (!$messageBox) console.error(message);
+
+		$messageBox.textContent = message;
+		$messageBox.classList.add('error');
+		$messageBox.classList.add('show');
 	};
 
 	Utils.message = function message(_message) {
-		console.log(_message);
+
+		if (!$messageBox) console.log(_message);
+
+		$messageBox.textContent = _message;
+		$messageBox.classList.add('info');
+		$messageBox.classList.add('show');
+
+		// delayHide(5000);
 	};
 
 	return Utils;
@@ -6271,7 +6312,7 @@ var RootViewModel = function () {
 
 				_this.onKeyPress('');
 			}).catch(function (e) {
-				__WEBPACK_IMPORTED_MODULE_1__libs_Utils__["a" /* default */].error(e);
+				__WEBPACK_IMPORTED_MODULE_1__libs_Utils__["a" /* default */].error(e.message);
 			});
 		});
 	}
@@ -6281,9 +6322,7 @@ var RootViewModel = function () {
 
 		var $hook = document.getElementById('fendMap');
 
-		if ($hook === null) {
-			__WEBPACK_IMPORTED_MODULE_1__libs_Utils__["a" /* default */].error('An Error occured. Try reloading the page.');
-		}
+		if ($hook === null) __WEBPACK_IMPORTED_MODULE_1__libs_Utils__["a" /* default */].error('An Error occured. Try reloading the page.');
 
 		var center = {
 			lat: coord.coords.latitude,
@@ -6297,12 +6336,14 @@ var RootViewModel = function () {
 		zomatoAPI.send(center, 1000).then(function (data) {
 			return _this2._apiResults(data);
 		}).catch(function (e) {
-			console.log(e);
+			__WEBPACK_IMPORTED_MODULE_1__libs_Utils__["a" /* default */].error(e.message);
 		});
 	};
 
 	RootViewModel.prototype._apiResults = function _apiResults(data) {
 		var _this3 = this;
+
+		console.log(data);
 
 		data.restaurants.map(function (rest) {
 			return rest.restaurant;
@@ -6311,12 +6352,15 @@ var RootViewModel = function () {
 				title: rest.name,
 				location: rest.location,
 				menu: rest.menu_url,
-				ratings: rest.user_rating
+				ratings: rest.user_rating,
+				cost_for_two: rest.currency + rest.average_cost_for_two,
+				image: rest.thumb
 			};
 		}).forEach(function (rest) {
-			console.log(rest);
-			_this3.markers.addMarker(rest);
+			return _this3.markers.addMarker(rest);
 		});
+
+		this.markers.fitMarkers();
 
 		this.onKeyPress('');
 	};
@@ -6402,19 +6446,57 @@ var Markers = function () {
 
 		this.points.push(data);
 
-		this._map.addMarker({
+		var marker = this._map.addMarker({
 			clickable: true,
-			label: data.title,
 			title: data.title,
 			position: {
 				lat: data.location.latitude * 1,
 				lng: data.location.longitude * 1
 			}
 		});
+
+		this.addMarkerWindow(data, marker);
+	};
+
+	Markers.prototype.addMarkerWindow = function addMarkerWindow(data, marker) {
+		var _this = this;
+
+		var infoWindow = this._map.window(this.getContent(data));
+
+		marker._infoWindow = infoWindow;
+
+		// When you click the marker
+		marker.addListener('click', function () {
+
+			// Hide all other infoWindows
+			_this._map.markers.forEach(function (marker) {
+				return marker._infoWindow.close();
+			});
+
+			// Show this one
+			infoWindow.open(_this._map._map, marker);
+		});
+	};
+
+	Markers.prototype.getContent = function getContent(data) {
+
+		return '\n\t\t\t<div class=\'info-window\'>\n\t\t\t\t<div class=\'info-window__title\'>' + data.title + '</div>\n\t\t\t\t<div class=\'info-window__address\'>' + data.location.address + '</div>\n\t\t\t\t<div class=\'info-window__ratings\' style=\'color: #' + data.ratings.rating_color + ';\'>\n\t\t\t\t\t<span class=\'rating-label\'>' + data.ratings.rating_text + '</span>\n\t\t\t\t\t<span class=\'rating-score\'>' + data.ratings.aggregate_rating + '</span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\'info-window__img\'>\n\t\t\t\t\t<img src=\'' + data.image + '\' alt=\'' + data.title + '\' />\n\t\t\t\t</div>\n\t\t\t\t<div class=\'info-window__menu\'>\n\t\t\t\t\t<a href=\'' + data.menu + '\' target=\'_parent _blank\' rel=\'noopener\'>Go To Menu</a>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t';
 	};
 
 	Markers.prototype.removeMarker = function removeMarker(index) {
 		this.points.splice(index, 1);
+	};
+
+	Markers.prototype.hideMarker = function hideMarker(index) {
+		this._map.hideMarker(index);
+	};
+
+	Markers.prototype.showMarker = function showMarker(index) {
+		this._map.showMarker(index);
+	};
+
+	Markers.prototype.fitMarkers = function fitMarkers() {
+		this._map.fitMarkers();
 	};
 
 	return Markers;

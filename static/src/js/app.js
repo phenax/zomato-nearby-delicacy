@@ -36,14 +36,14 @@ class RootViewModel {
 
 			this.map
 				.getCoordinates()
-				.then((coord) => {
+				.then( coord => {
 
 					this._mapInit(coord);
 
 					this.onKeyPress('');
 				})
-				.catch((e) => {
-					Utils.error(e);
+				.catch( e => {
+					Utils.error(e.message);
 				});
 		});
 	}
@@ -53,9 +53,8 @@ class RootViewModel {
 
 		let $hook= document.getElementById('fendMap');
 
-		if($hook === null) {
+		if($hook === null)
 			Utils.error('An Error occured. Try reloading the page.');
-		}
 
 		const center= {
 			lat: coord.coords.latitude,
@@ -70,12 +69,14 @@ class RootViewModel {
 			.send(center, 1000)
 			.then( data => this._apiResults(data))
 			.catch( e => {
-				console.log(e);
+				Utils.error(e.message);
 			});
 	}
 
 
 	_apiResults(data) {
+
+		console.log(data);
 
 		data.restaurants
 			.map( rest => rest.restaurant )
@@ -84,11 +85,12 @@ class RootViewModel {
 				location: rest.location,
 				menu: rest.menu_url,
 				ratings: rest.user_rating,
+				cost_for_two: rest.currency + rest.average_cost_for_two,
+				image: rest.thumb,
 			}))
-			.forEach( rest => {
-				console.log(rest);
-				this.markers.addMarker(rest);
-			});
+			.forEach( rest => this.markers.addMarker(rest));
+
+		this.markers.fitMarkers();
 
 		this.onKeyPress('');
 	}

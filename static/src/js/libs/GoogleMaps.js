@@ -76,39 +76,43 @@ export default class GoogleMaps {
 
 	addMarker(options) {
 
-		this.markers.push(
+		const marker= new window.google.maps.Marker({
+			map: this._map,
+			...options
+		});
 
-			new window.google.maps.Marker({
-				map: this._map,
-				...options
-			})
-		);
+		this.markers.push(marker);
+
+		return marker;
 	}
 
 
-	setMarker(index, position) {
+	fitMarkers() {
 
-		// TODO: Allow user to change the position 
-		if(this.marker[index]) {
-			this.marker[index].setPosition(position);
-		}
+		const bounds = new window.google.maps.LatLngBounds();
+
+		this.markers.forEach(marker => {
+			bounds.extend(marker.getPosition());
+		});
+
+		this._map.fitBounds(bounds);
+	}
+
+
+	window(content) {
+
+		return new window.google.maps.InfoWindow({
+			content
+		});
 	}
 
 
 	hideMarker(index) {
-
-		// TODO: Fix this
-		if(this.marker[index]) {
-			this.marker[index]= null;
-		}
+		this.markers[index].setMap(null);
 	}
 
 	showMarker(index) {
-
-		// TODO: Fix this
-		if(!this.marker[index]) {
-			this.marker[index]= null;
-		}
+		this.markers[index].setMap(this._map);
 	}
 
 
