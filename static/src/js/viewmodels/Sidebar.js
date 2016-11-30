@@ -16,6 +16,7 @@ export class Sidebar {
 
 
 export class SidebarList {
-
-	
+	constructor(props) {
+		// console.log(props);
+	}
 }

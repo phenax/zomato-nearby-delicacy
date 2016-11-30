@@ -17,7 +17,11 @@ class RootViewModel {
 
 	loading= ko.observable(true);
 
+	searchText= ko.observable('fooo');
+
 	constructor() {
+
+		this.onKeyPress= this.onKeyPress.bind(this);
 
 		this.map= new GoogleMaps();
 
@@ -51,6 +55,14 @@ class RootViewModel {
 		this.map.createMap(center, $hook, 10);
 
 		this.loading(false);
+	}
+
+
+	onKeyPress(e) {
+
+		// console.log(e);
+
+		// this.searchText('awesome');
 	}
 }
 

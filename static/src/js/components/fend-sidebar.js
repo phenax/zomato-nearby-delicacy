@@ -13,7 +13,7 @@ const template= `
 					Papier-mache man Shibuya crypto-wonton soup vinyl fluidity. Cyber-apophenia youtube jeans 8-bit office numinous knife long-chain hydrocarbons drugs denim nodal point neon. Franchise math-construct narrative industrial grade urban girl hacker San Francisco knife savant pre-bomb modem drone footage. Cardboard marketing sub-orbital dissident woman industrial grade dome soul-delay. Tiger-team car realism market sensory tanto Legba sub-orbital rain systemic-ware pen rebar Kowloon. 
 				</div>
 
-				<fend-sidebar-list></fend-sidebar-list>
+				<div data-bind='component: "fend-sidebar-list"'></div>
 			</div>
 
 			<div
@@ -35,6 +35,9 @@ const template= `
 		</header>
 	</div>
 `;
+
+
+
 
 ko.components.register('fend-sidebar', {
 	template,
