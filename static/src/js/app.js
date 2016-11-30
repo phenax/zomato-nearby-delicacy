@@ -1,9 +1,11 @@
 
 import ko from 'knockout';
 
+import Utils from './libs/Utils';
+import ApiHandler from './libs/ApiHandler';
 import GoogleMaps from './libs/GoogleMaps';
 
-import Utils from './libs/Utils';
+import {Markers} from './collections/Markers';
 
 // All components
 import './components/fend-sidebar';
@@ -17,7 +19,6 @@ class RootViewModel {
 	loading= ko.observable(true);
 	searchText= ko.observable('');
 
-	markers= ko.observableArray();
 	filteredMarkers= ko.observableArray();
 
 	constructor() {
@@ -27,7 +28,11 @@ class RootViewModel {
 
 		this.map= new GoogleMaps();
 
+		this.markers= new Markers(this.map);
+
 		this.map.ready(() => {
+
+			this.loading(false);
 
 			this.map
 				.getCoordinates()
@@ -57,33 +62,42 @@ class RootViewModel {
 			lng: coord.coords.longitude
 		};
 
-		this.map.createMap(center, $hook, 10);
+		this.map.createMap(center, $hook, 16);
 
-		this.loading(false);
+		const zomatoAPI= new ApiHandler();
 
-		this.markers.push({
-			title: 'Hello world'
-		});
+		zomatoAPI
+			.send(center, 1000)
+			.then( data => this._apiResults(data))
+			.catch( e => {
+				console.log(e);
+			});
+	}
 
-		this.markers.push({
-			title: 'Asia'
-		});
-		this.markers.push({
-			title: 'New america'
-		});
-		this.markers.push({
-			title: 'India Hindustan'
-		});
-		this.markers.push({
-			title: 'North America'
-		});
+
+	_apiResults(data) {
+
+		data.restaurants
+			.map( rest => rest.restaurant )
+			.map( rest => ({
+				title: rest.name,
+				location: rest.location,
+				menu: rest.menu_url,
+				ratings: rest.user_rating,
+			}))
+			.forEach( rest => {
+				console.log(rest);
+				this.markers.addMarker(rest);
+			});
+
+		this.onKeyPress('');
 	}
 
 
 	onKeyPress(e) {
 
 		this.filteredMarkers(
-			this.markers()
+			this.markers.points()
 				.filter(
 					marker => 
 						marker.title

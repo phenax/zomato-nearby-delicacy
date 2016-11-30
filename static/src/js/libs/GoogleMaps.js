@@ -74,13 +74,13 @@ export default class GoogleMaps {
 	}
 
 
-	addMarker(position) {
+	addMarker(options) {
 
 		this.markers.push(
 
 			new window.google.maps.Marker({
-				position: position,
-				map: this._map
+				map: this._map,
+				...options
 			})
 		);
 	}

@@ -6044,6 +6044,8 @@ __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.components.register('fend-sideb
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var GoogleMaps = function () {
@@ -6122,12 +6124,11 @@ var GoogleMaps = function () {
 		return self;
 	};
 
-	GoogleMaps.prototype.addMarker = function addMarker(position) {
+	GoogleMaps.prototype.addMarker = function addMarker(options) {
 
-		this.markers.push(new window.google.maps.Marker({
-			position: position,
+		this.markers.push(new window.google.maps.Marker(_extends({
 			map: this._map
-		}));
+		}, options)));
 	};
 
 	GoogleMaps.prototype.setMarker = function setMarker(index, position) {
@@ -6218,13 +6219,17 @@ var Utils = function () {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_knockout__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__libs_GoogleMaps__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__libs_Utils__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_fend_sidebar__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_fend_sidebar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_fend_sidebar__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_fend_sidebar_list__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_fend_sidebar_list___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_fend_sidebar_list__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__libs_Utils__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__libs_ApiHandler__ = __webpack_require__(7);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__libs_GoogleMaps__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__collections_Markers__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_fend_sidebar__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_fend_sidebar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_fend_sidebar__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_fend_sidebar_list__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_fend_sidebar_list___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_fend_sidebar_list__);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
 
 
 
@@ -6245,7 +6250,6 @@ var RootViewModel = function () {
 		this.title = 'Nearby Restaurants';
 		this.loading = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observable(true);
 		this.searchText = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observable('');
-		this.markers = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observableArray();
 		this.filteredMarkers = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observableArray();
 
 
@@ -6253,9 +6257,13 @@ var RootViewModel = function () {
 			return _this.onKeyPress(value);
 		});
 
-		this.map = new __WEBPACK_IMPORTED_MODULE_1__libs_GoogleMaps__["a" /* default */]();
+		this.map = new __WEBPACK_IMPORTED_MODULE_3__libs_GoogleMaps__["a" /* default */]();
+
+		this.markers = new __WEBPACK_IMPORTED_MODULE_4__collections_Markers__["a" /* Markers */](this.map);
 
 		this.map.ready(function () {
+
+			_this.loading(false);
 
 			_this.map.getCoordinates().then(function (coord) {
 
@@ -6263,17 +6271,18 @@ var RootViewModel = function () {
 
 				_this.onKeyPress('');
 			}).catch(function (e) {
-				__WEBPACK_IMPORTED_MODULE_2__libs_Utils__["a" /* default */].error(e);
+				__WEBPACK_IMPORTED_MODULE_1__libs_Utils__["a" /* default */].error(e);
 			});
 		});
 	}
 
 	RootViewModel.prototype._mapInit = function _mapInit(coord) {
+		var _this2 = this;
 
 		var $hook = document.getElementById('fendMap');
 
 		if ($hook === null) {
-			__WEBPACK_IMPORTED_MODULE_2__libs_Utils__["a" /* default */].error('An Error occured. Try reloading the page.');
+			__WEBPACK_IMPORTED_MODULE_1__libs_Utils__["a" /* default */].error('An Error occured. Try reloading the page.');
 		}
 
 		var center = {
@@ -6281,31 +6290,40 @@ var RootViewModel = function () {
 			lng: coord.coords.longitude
 		};
 
-		this.map.createMap(center, $hook, 10);
+		this.map.createMap(center, $hook, 16);
 
-		this.loading(false);
+		var zomatoAPI = new __WEBPACK_IMPORTED_MODULE_2__libs_ApiHandler__["a" /* default */]();
 
-		this.markers.push({
-			title: 'Hello world'
+		zomatoAPI.send(center, 1000).then(function (data) {
+			return _this2._apiResults(data);
+		}).catch(function (e) {
+			console.log(e);
+		});
+	};
+
+	RootViewModel.prototype._apiResults = function _apiResults(data) {
+		var _this3 = this;
+
+		data.restaurants.map(function (rest) {
+			return rest.restaurant;
+		}).map(function (rest) {
+			return {
+				title: rest.name,
+				location: rest.location,
+				menu: rest.menu_url,
+				ratings: rest.user_rating
+			};
+		}).forEach(function (rest) {
+			console.log(rest);
+			_this3.markers.addMarker(rest);
 		});
 
-		this.markers.push({
-			title: 'Asia'
-		});
-		this.markers.push({
-			title: 'New america'
-		});
-		this.markers.push({
-			title: 'India Hindustan'
-		});
-		this.markers.push({
-			title: 'North America'
-		});
+		this.onKeyPress('');
 	};
 
 	RootViewModel.prototype.onKeyPress = function onKeyPress(e) {
 
-		this.filteredMarkers(this.markers().filter(function (marker) {
+		this.filteredMarkers(this.markers.points().filter(function (marker) {
 			return marker.title.toLowerCase().includes(e.toLowerCase());
 		}));
 	};
@@ -6314,6 +6332,93 @@ var RootViewModel = function () {
 }();
 
 __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.applyBindings(new RootViewModel());
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+// curl -X GET --header "Accept: application/json" --header "user-key: 4355174366f06b01a4ae777b97d7e70e"
+
+var ApiHandler = function () {
+	function ApiHandler() {
+		_classCallCheck(this, ApiHandler);
+
+		this.API_KEY = '4355174366f06b01a4ae777b97d7e70e';
+	}
+
+	ApiHandler.prototype.getUrl = function getUrl(lat, lng, radius) {
+		return 'https://developers.zomato.com/api/v2.1/search?lat=' + lat + '&lon=' + lng + '&radius=' + radius;
+	};
+
+	ApiHandler.prototype.send = function send(coords, radius) {
+
+		var url = this.getUrl(coords.lat, coords.lng, radius);
+
+		var options = {
+			method: 'GET',
+			mode: 'cors',
+			headers: {
+				'Accept': 'application/json',
+				'user-key': this.API_KEY
+			}
+		};
+
+		return fetch(url, options).then(function (data) {
+			return data.json();
+		});
+	};
+
+	return ApiHandler;
+}();
+
+/* harmony default export */ exports["a"] = ApiHandler;
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_knockout__);
+/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return Markers; });
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var Markers = function () {
+	function Markers(map) {
+		_classCallCheck(this, Markers);
+
+		this.points = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observableArray();
+
+
+		this._map = map;
+	}
+
+	Markers.prototype.addMarker = function addMarker(data) {
+
+		this.points.push(data);
+
+		this._map.addMarker({
+			clickable: true,
+			label: data.title,
+			title: data.title,
+			position: {
+				lat: data.location.latitude * 1,
+				lng: data.location.longitude * 1
+			}
+		});
+	};
+
+	Markers.prototype.removeMarker = function removeMarker(index) {
+		this.points.splice(index, 1);
+	};
+
+	return Markers;
+}();
 
 /***/ }
 /******/ ]);
