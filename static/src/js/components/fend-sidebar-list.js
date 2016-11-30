@@ -6,8 +6,10 @@ import { SidebarList } from '../viewmodels/Sidebar';
 ko.components.register('fend-sidebar-list', {
 	viewModel: SidebarList,
 	template: `
-		<div class='sidebar__list'>
-			This is ze list
-		</div>
+		<ul class='sidebar__list'>
+			<li>
+				Woow
+			</li>
+		</ul>
 	`
 });

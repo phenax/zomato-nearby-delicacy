@@ -122,12 +122,32 @@ button {
   position: absolute;
   left: 0;
   top: 0;
-  z-index: 11;
-  height: 100vh;
-  width: 300px;
-  background-color: #fff;
-  box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.2);
-  transform: translateX(-103%);
-  transition: transform .3s ease-in-out; }
-  .sidebar--visible {
+  z-index: 11; }
+  .sidebar--visible .sidebar__menu {
     transform: none; }
+  .sidebar--visible .sidebar__blank {
+    opacity: 1;
+    pointer-events: auto; }
+  .sidebar__menu {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 11;
+    height: 100vh;
+    width: 300px;
+    background-color: #fff;
+    box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.2);
+    transform: translateX(-103%);
+    transition: transform .3s ease-in-out; }
+  .sidebar__blank {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 10;
+    cursor: pointer;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .3s ease-in-out; }
