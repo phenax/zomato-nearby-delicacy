@@ -1,52 +1,8 @@
 
 @import 'default';
 
-.header {
-	position: absolute;
-	top: 0;
-	left: 0;
-	width: 100%;
-	z-index: 10;
-
-	color: #fff;
-	background-color: $color_primary;
-
-	box-shadow: 0 0 10px 3px rgba(0,0,0,.4);
-
-	$spinnerSize: 1.6em;
-	$btnPadding: .8em;
-
-	&__menubtn {
-		color: currentColor;
-		font-size: 1.4em;
-		padding: #{$btnPadding};
-		background-color: transparent;
-	}
-
-	&__title {
-		display: inline-block;
-		text-transform: uppercase;
-	}
-
-	&__loading {
-
-		position: absolute;
-		right: 1em;
-		top: 1em;
-
-		width: $spinnerSize;
-		height: $spinnerSize;
-		border-radius: 50%;
-		border: 3px solid transparent;
-		border-left-color: #fff;
-
-		animation: spinner .5s linear infinite;
-		will-change: transform;
-		contain: strict;
-	}
-}
-
-
+@import 'sidebar';
+@import 'header';
 
 .map {
 	margin-top: 8vh;
@@ -56,62 +12,3 @@
 }
 
 
-.model-wrapper {
-	position: fixed;
-	left: 0;
-	top: 0;
-	width: 100%;
-	z-index: 10;
-}
-
-
-.sidebar {
-
-	$sidebarWidth: 300px;
-
-	position: absolute;
-	left: 0;
-	top: 0;
-	z-index: 11;
-
-	&--visible {
-
-		.sidebar__menu {
-			transform: none;
-		}
-
-		.sidebar__blank {
-			opacity: 1;
-			pointer-events: auto;
-		}
-	}
-
-	&__menu {
-		position: absolute;
-		left: 0;
-		top: 0;
-		z-index: 11;
-		height: 100vh;
-		width: $sidebarWidth;
-		background-color: #fff;
-		box-shadow: 0 0 20px 5px rgba(0,0,0,.2);
-
-		transform: translateX(-103%);
-		transition: transform .3s ease-in-out;
-	}
-
-	&__blank {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100vw;
-		height: 100vh;
-		background-color: rgba(0,0,0,.8);
-		z-index: 10;
-
-		cursor: pointer;
-		pointer-events: none;
-		opacity: 0;
-		transition: opacity .3s ease-in-out;
-	}
-}

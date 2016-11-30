@@ -5981,7 +5981,7 @@ var Sidebar = function () {
 	function Sidebar() {
 		_classCallCheck(this, Sidebar);
 
-		this.isVisible = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observable(false);
+		this.isVisible = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observable(true);
 	}
 
 	Sidebar.prototype.openMenu = function openMenu() {
@@ -5995,9 +5995,7 @@ var Sidebar = function () {
 	return Sidebar;
 }();
 
-var SidebarList = function SidebarList(props) {
-	// console.log(props);
-
+var SidebarList = function SidebarList() {
 	_classCallCheck(this, SidebarList);
 };
 
@@ -6014,9 +6012,11 @@ var SidebarList = function SidebarList(props) {
 
 
 
+var template = '\n\n\t<div class=\'sidebar__inp-wrap\'>\n\n\t\t<label>\n\n\t\t\t<input\n\t\t\t\ttype=\'text\'\n\t\t\t\tclass=\'sidebar__input\'\n\t\t\t\tplaceholder=\'Search...\'\n\t\t\t\tdata-bind="textInput: $root.searchText"\n\t\t\t/>\n\n\t\t\t<div class=\'sidebar__input--after\'></div>\n\n\t\t</label>\n\n\t</div>\n\n\t<ul\n\t\tclass=\'sidebar__list\'\n\t\tdata-bind="foreach: $root.filteredMarkers">\n\n\t\t<li class=\'sidebar__list__item\'>\n\t\t\t<button class=\'sidebar__list__item__btn\'>\n\t\t\t\t<div data-bind="text: title"></div>\n\t\t\t</button>\n\t\t</li>\n\n\t</ul>\n';
+
 __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.components.register('fend-sidebar-list', {
 	viewModel: __WEBPACK_IMPORTED_MODULE_1__viewmodels_Sidebar__["b" /* SidebarList */],
-	template: '\n\t\tdata-bind="event: { keypress: $root.onKeyPress }"\n\t\t<input type=\'text\' class=\'sidebar__input\' data-bind="textInput: $root.searchText" />\n\t\t<div data-bind="text: $root.searchText"></div>\n\n\t\t<ul class=\'sidebar__list\'>\n\t\t\t<li>\n\t\t\t\tWoow\n\t\t\t</li>\n\t\t</ul>\n\t'
+	template: template
 });
 
 /***/ },
@@ -6032,7 +6032,7 @@ __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.components.register('fend-sideb
 
 
 
-var template = '\n\t<div class=\'model-wrapper\'>\n\t\t<div class=\'sidebar\' data-bind="css: { \'sidebar--visible\': isVisible }">\n\t\t\t<div class=\'sidebar__menu\'>\n\n\t\t\t\t<div class=\'sidebar__descr\'>\n\t\t\t\t\tPapier-mache man Shibuya crypto-wonton soup vinyl fluidity. Cyber-apophenia youtube jeans 8-bit office numinous knife long-chain hydrocarbons drugs denim nodal point neon. Franchise math-construct narrative industrial grade urban girl hacker San Francisco knife savant pre-bomb modem drone footage. Cardboard marketing sub-orbital dissident woman industrial grade dome soul-delay. Tiger-team car realism market sensory tanto Legba sub-orbital rain systemic-ware pen rebar Kowloon. \n\t\t\t\t</div>\n\n\t\t\t\t<div data-bind=\'component: "fend-sidebar-list"\'></div>\n\t\t\t</div>\n\n\t\t\t<div\n\t\t\t\tclass=\'sidebar__blank\'\n\t\t\t\tdata-bind="click: closeMenu">\n\t\t\t</div>\n\t\t</div>\n\n\t\t<header class=\'header\'>\n\n\t\t\t<button\n\t\t\t\tclass=\'header__menubtn fa fa-bars\'\n\t\t\t\tdata-bind="click: openMenu">\n\t\t\t</button>\n\n\t\t\t<div class=\'header__title\' data-bind=\'text: $root.title || "No Title"\'></div>\n\n\t\t\t<div class=\'header__loading\' data-bind=\'visible: $root.loading\'></div>\n\t\t</header>\n\t</div>\n';
+var template = '\n\t<div class=\'model-wrapper\'>\n\t\t<div class=\'sidebar\' data-bind="css: { \'sidebar--visible\': isVisible }">\n\t\t\t<div class=\'sidebar__menu\'>\n\n\t\t\t\t<div class=\'sidebar__descr\'></div>\n\n\t\t\t\t<div data-bind=\'component: "fend-sidebar-list"\'></div>\n\t\t\t</div>\n\n\t\t\t<div\n\t\t\t\tclass=\'sidebar__blank\'\n\t\t\t\tdata-bind="click: closeMenu">\n\t\t\t</div>\n\t\t</div>\n\n\t\t<header class=\'header\'>\n\n\t\t\t<button\n\t\t\t\tclass=\'header__menubtn fa fa-bars\'\n\t\t\t\tdata-bind="click: openMenu">\n\t\t\t</button>\n\n\t\t\t<div class=\'header__title\' data-bind=\'text: $root.title || "No Title"\'></div>\n\n\t\t\t<div class=\'header__loading\' data-bind=\'visible: $root.loading\'></div>\n\t\t</header>\n\t</div>\n';
 
 __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.components.register('fend-sidebar', {
 	template: template,
@@ -6233,7 +6233,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 // All components
-// import './components/fend-map';
 
 
 
@@ -6245,17 +6244,24 @@ var RootViewModel = function () {
 
 		this.title = 'Nearby Restaurants';
 		this.loading = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observable(true);
-		this.searchText = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observable('fooo');
+		this.searchText = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observable('');
+		this.markers = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observableArray();
+		this.filteredMarkers = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observableArray();
 
 
-		this.onKeyPress = this.onKeyPress.bind(this);
+		this.searchText.subscribe(function (value) {
+			return _this.onKeyPress(value);
+		});
 
 		this.map = new __WEBPACK_IMPORTED_MODULE_1__libs_GoogleMaps__["a" /* default */]();
 
 		this.map.ready(function () {
 
 			_this.map.getCoordinates().then(function (coord) {
+
 				_this._mapInit(coord);
+
+				_this.onKeyPress('');
 			}).catch(function (e) {
 				__WEBPACK_IMPORTED_MODULE_2__libs_Utils__["a" /* default */].error(e);
 			});
@@ -6278,13 +6284,30 @@ var RootViewModel = function () {
 		this.map.createMap(center, $hook, 10);
 
 		this.loading(false);
+
+		this.markers.push({
+			title: 'Hello world'
+		});
+
+		this.markers.push({
+			title: 'Asia'
+		});
+		this.markers.push({
+			title: 'New america'
+		});
+		this.markers.push({
+			title: 'India Hindustan'
+		});
+		this.markers.push({
+			title: 'North America'
+		});
 	};
 
 	RootViewModel.prototype.onKeyPress = function onKeyPress(e) {
 
-		// console.log(e);
-
-		// this.searchText('awesome');
+		this.filteredMarkers(this.markers().filter(function (marker) {
+			return marker.title.toLowerCase().includes(e.toLowerCase());
+		}));
 	};
 
 	return RootViewModel;

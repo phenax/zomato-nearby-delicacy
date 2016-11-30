@@ -3,7 +3,7 @@ import ko from 'knockout';
 
 export class Sidebar {
 
-	isVisible= ko.observable(false);
+	isVisible= ko.observable(true);
 
 	openMenu() {
 		this.isVisible(true);
@@ -15,8 +15,4 @@ export class Sidebar {
 }
 
 
-export class SidebarList {
-	constructor(props) {
-		// console.log(props);
-	}
-}
+export class SidebarList {}

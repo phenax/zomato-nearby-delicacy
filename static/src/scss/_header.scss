@@ -1,0 +1,45 @@
+
+.header {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	z-index: 10;
+
+	color: #fff;
+	background-color: $color_primary;
+
+	box-shadow: 0 0 10px 3px rgba(0,0,0,.4);
+
+	$spinnerSize: 1.6em;
+	$btnPadding: .8em;
+
+	&__menubtn {
+		color: currentColor;
+		font-size: 1.4em;
+		padding: #{$btnPadding};
+		background-color: transparent;
+	}
+
+	&__title {
+		display: inline-block;
+		text-transform: uppercase;
+	}
+
+	&__loading {
+
+		position: absolute;
+		right: 1em;
+		top: 1em;
+
+		width: $spinnerSize;
+		height: $spinnerSize;
+		border-radius: 50%;
+		border: 3px solid transparent;
+		border-left-color: #fff;
+
+		animation: spinner .5s linear infinite;
+		will-change: transform;
+		contain: strict;
+	}
+}

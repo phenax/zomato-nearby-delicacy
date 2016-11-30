@@ -75,6 +75,88 @@ button {
   to {
     transform: rotate(360deg); } }
 
+.model-wrapper {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 10; }
+
+.sidebar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 11; }
+  .sidebar--visible .sidebar__menu {
+    transform: none; }
+  .sidebar--visible .sidebar__blank {
+    opacity: 1;
+    pointer-events: auto; }
+  .sidebar__menu {
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 11;
+    width: 300px;
+    height: 100vh;
+    background-color: #fff;
+    color: #555;
+    box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.2);
+    overflow: auto;
+    padding: 1em;
+    transform: translateX(-103%);
+    transition: transform .3s ease-in-out; }
+  .sidebar__blank {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 10;
+    cursor: pointer;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .3s ease-in-out; }
+  .sidebar__list {
+    padding: 2em 1em; }
+    .sidebar__list__item__btn {
+      display: block;
+      width: 100%;
+      font-size: 1em;
+      padding: 1em;
+      color: #555;
+      text-align: left;
+      background-color: transparent; }
+  .sidebar__search-text {
+    font-size: .8em;
+    text-align: left;
+    padding: 1em; }
+  .sidebar label {
+    display: block;
+    width: 100%;
+    position: relative; }
+  .sidebar__input {
+    display: block;
+    width: 100%;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #ddd;
+    font-size: 1em;
+    padding: .7em 1em;
+    color: inherit; }
+    .sidebar__input--after {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 1px;
+      background-color: #e91e63;
+      transform: scale(0);
+      transition: transform .2s ease-in-out; }
+    .sidebar__input:focus ~ .sidebar__input--after {
+      transform: none; }
+
 .header {
   position: absolute;
   top: 0;
@@ -110,44 +192,3 @@ button {
   min-height: 92vh;
   position: relative;
   z-index: 0; }
-
-.model-wrapper {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  z-index: 10; }
-
-.sidebar {
-  position: absolute;
-  left: 0;
-  top: 0;
-  z-index: 11; }
-  .sidebar--visible .sidebar__menu {
-    transform: none; }
-  .sidebar--visible .sidebar__blank {
-    opacity: 1;
-    pointer-events: auto; }
-  .sidebar__menu {
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 11;
-    height: 100vh;
-    width: 300px;
-    background-color: #fff;
-    box-shadow: 0 0 20px 5px rgba(0, 0, 0, 0.2);
-    transform: translateX(-103%);
-    transition: transform .3s ease-in-out; }
-  .sidebar__blank {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.8);
-    z-index: 10;
-    cursor: pointer;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity .3s ease-in-out; }
