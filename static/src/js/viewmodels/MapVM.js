@@ -1,7 +1,5 @@
-
-import ko from 'knockout';
+// #Removed: Felt like overkill
 
 export class MapVM {
-
-	// markers= ko.observableArray();
+	
 }

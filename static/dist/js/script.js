@@ -61,7 +61,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 6);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -5969,38 +5969,36 @@ ko.exportSymbol('nativeTemplateEngine', ko.nativeTemplateEngine);
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_knockout__);
 /* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return Sidebar; });
 /* harmony export (binding) */ __webpack_require__.d(exports, "b", function() { return SidebarList; });
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Sidebar = function Sidebar() {
-  _classCallCheck(this, Sidebar);
-};
+
+
+var Sidebar = function () {
+	function Sidebar() {
+		// setTimeout(() => { this.isVisible(true); }, 5000);
+
+		_classCallCheck(this, Sidebar);
+
+		this.isVisible = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observable(false);
+	}
+
+	Sidebar.prototype.openMenu = function openMenu() {
+		this.isVisible(true);
+	};
+
+	return Sidebar;
+}();
 
 var SidebarList = function SidebarList() {
-  _classCallCheck(this, SidebarList);
+	_classCallCheck(this, SidebarList);
 };
 
 /***/ },
 /* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_knockout__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__viewmodels_MapVM__ = __webpack_require__(7);
-
-
-
-
-
-__WEBPACK_IMPORTED_MODULE_0_knockout___default.a.components.register('fend-map', {
-	viewModel: __WEBPACK_IMPORTED_MODULE_1__viewmodels_MapVM__["a" /* MapVM */],
-	template: '<div class="map" id="fendMap"></div>'
-});
-
-/***/ },
-/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6018,7 +6016,7 @@ __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.components.register('fend-sideb
 });
 
 /***/ },
-/* 4 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6030,13 +6028,15 @@ __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.components.register('fend-sideb
 
 
 
+var template = '\n\t<div class=\'model-wrapper\'>\n\t\t<div class=\'sidebar\' data-bind="css: { \'sidebar--visible\': isVisible }">\n\t\t\t<fend-sidebar-list></fend-sidebar-list>\n\t\t</div>\n\n\t\t<header class=\'header\'>\n\t\t\t<button\n\t\t\t\tclass=\'header__menubtn fa fa-bars\'\n\t\t\t\tdata-bind="click: openMenu">\n\t\t\t</button>\n\t\t\t<div class=\'header__title\' data-bind=\'text: $root.title || "No Title"\'></div>\n\n\t\t\t<div class=\'header__loading\' data-bind=\'visible: $root.loading\'></div>\n\t\t</header>\n\t</div>\n';
+
 __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.components.register('fend-sidebar', {
-	viewModel: __WEBPACK_IMPORTED_MODULE_1__viewmodels_Sidebar__["a" /* Sidebar */],
-	template: '\n\t\t<div class=\'sidebar__wrap\'>\n\t\t\tBookheimekhan\n\n\t\t\t<fend-sidebar-list></fend-sidebar-list>\n\t\t</div>\n\t'
+	template: template,
+	viewModel: __WEBPACK_IMPORTED_MODULE_1__viewmodels_Sidebar__["a" /* Sidebar */]
 });
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6175,11 +6175,13 @@ var GoogleMaps = function () {
 /* harmony default export */ exports["a"] = GoogleMaps;
 
 /***/ },
-/* 6 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var $messageBox = document.querySelector('.js-message-box');
 
 var Utils = function () {
 	function Utils() {
@@ -6193,6 +6195,7 @@ var Utils = function () {
 
 	Utils.error = function error(message) {
 		console.error(message);
+		console.log($messageBox);
 	};
 
 	Utils.message = function message(_message) {
@@ -6205,36 +6208,18 @@ var Utils = function () {
 /* harmony default export */ exports["a"] = Utils;
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_knockout__);
-/* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return MapVM; });
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
-
-var MapVM = function MapVM() {
-	_classCallCheck(this, MapVM);
-};
-
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_knockout__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__libs_GoogleMaps__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__libs_Utils__ = __webpack_require__(6);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_fend_map__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_fend_map___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_fend_map__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_fend_sidebar__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_fend_sidebar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_fend_sidebar__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_fend_sidebar_list__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_fend_sidebar_list___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_fend_sidebar_list__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__libs_GoogleMaps__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__libs_Utils__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_fend_sidebar__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_fend_sidebar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_fend_sidebar__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_fend_sidebar_list__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_fend_sidebar_list___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__components_fend_sidebar_list__);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -6244,7 +6229,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 // All components
-
+// import './components/fend-map';
 
 
 
@@ -6258,19 +6243,19 @@ var RootViewModel = function () {
 		this.loading = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observable(true);
 
 
-		var map = new __WEBPACK_IMPORTED_MODULE_1__libs_GoogleMaps__["a" /* default */]();
+		this.map = new __WEBPACK_IMPORTED_MODULE_1__libs_GoogleMaps__["a" /* default */]();
 
-		map.ready(function () {
+		this.map.ready(function () {
 
-			map.getCoordinates().then(function (coord) {
-				_this._mapInit(coord, map);
+			_this.map.getCoordinates().then(function (coord) {
+				_this._mapInit(coord);
 			}).catch(function (e) {
 				__WEBPACK_IMPORTED_MODULE_2__libs_Utils__["a" /* default */].error(e);
 			});
 		});
 	}
 
-	RootViewModel.prototype._mapInit = function _mapInit(coord, map) {
+	RootViewModel.prototype._mapInit = function _mapInit(coord) {
 
 		var $hook = document.getElementById('fendMap');
 
@@ -6283,7 +6268,7 @@ var RootViewModel = function () {
 			lng: coord.coords.longitude
 		};
 
-		map.createMap(center, $hook, 10);
+		this.map.createMap(center, $hook, 10);
 
 		this.loading(false);
 	};

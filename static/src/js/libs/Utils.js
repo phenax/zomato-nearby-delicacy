@@ -1,4 +1,4 @@
-
+let $messageBox= document.querySelector('.js-message-box');
 
 export default class Utils {
 
@@ -9,6 +9,7 @@ export default class Utils {
 
 	static error(message) {
 		console.error(message);
+		console.log($messageBox);
 	}
 
 	static message(message) {

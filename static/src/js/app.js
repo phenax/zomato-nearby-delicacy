@@ -6,7 +6,7 @@ import GoogleMaps from './libs/GoogleMaps';
 import Utils from './libs/Utils';
 
 // All components
-import './components/fend-map';
+// import './components/fend-map';
 import './components/fend-sidebar';
 import './components/fend-sidebar-list';
 
@@ -19,13 +19,14 @@ class RootViewModel {
 
 	constructor() {
 
-		const map= new GoogleMaps();
+		this.map= new GoogleMaps();
 
-		map.ready(() => {
+		this.map.ready(() => {
 
-			map.getCoordinates()
+			this.map
+				.getCoordinates()
 				.then((coord) => {
-					this._mapInit(coord, map);
+					this._mapInit(coord);
 				})
 				.catch((e) => {
 					Utils.error(e);
@@ -34,7 +35,7 @@ class RootViewModel {
 	}
 
 
-	_mapInit(coord, map) {
+	_mapInit(coord) {
 
 		let $hook= document.getElementById('fendMap');
 
@@ -47,7 +48,7 @@ class RootViewModel {
 			lng: coord.coords.longitude
 		};
 
-		map.createMap(center, $hook, 10);
+		this.map.createMap(center, $hook, 10);
 
 		this.loading(false);
 	}

@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title data-bind='text: title'>Nearby Restaurants</title>
+	<meta charset="UTF-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+	<title>Nearby Restaurants</title>
+
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
 	<link href="https://fonts.googleapis.com/css?family=Roboto:100,400" rel="stylesheet" />
 	<link rel="stylesheet" href="./dist/css/style.css"/>
 </head>
 <body>
 
-<header class='header'>
-	<button class='header__menubtn fa fa-bars'></button>
-	<div class='header__title' data-bind='text: title'></div>
+<fend-sidebar></fend-sidebar>
 
-	<div class='header__loading' data-bind='visible: loading'></div>
-</header>
+<div class="map" id="fendMap"></div>
 
-<fend-sidebar class='sidebar'></fend-sidebar>
-<fend-map></fend-map>
+<div class='message-box js-message-box'></div>
 
 <script async defer src='./dist/js/script.js'></script>
 </body>
