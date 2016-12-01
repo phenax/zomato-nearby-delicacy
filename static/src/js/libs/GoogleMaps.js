@@ -25,6 +25,11 @@ export default class GoogleMaps {
 	}
 
 
+	get ANIMATIONS() {
+		return window.google.maps.Animation;
+	}
+
+
 	/**
 	 * Load the google maps api
 	 */
@@ -116,21 +121,27 @@ export default class GoogleMaps {
 	/**
 	 * Create and add a marker to the map
 	 * 
-	 * @param {Object} options  Marker configuration
+	 * @param {Object} options    Marker configuration
+	 * @param {Object} iconStyle  Marker icon style configuration
+	 *
+	 * @return {Marker}  The new marker instance
 	 */
-	addMarker(options) {
+	addMarker(options, iconStyle={}) {
 
 		const marker= new window.google.maps.Marker({
 			map: this._map,
 			clickable: true,
+			animation: this.ANIMATIONS.DROP,
 			icon: {
 				path: 'M0-48c-9.8 0-17.7 7.8-17.7 17.4 0 15.5 17.7 30.6 17.7 30.6s17.7-15.4 17.7-30.6c0-9.6-7.9-17.4-17.7-17.4z',
-				fillColor: '#fff',
+				fillColor: '#18243B',
 				fillOpacity: 1,
 				strokeColor: '#253691',
 				strokeWeight: 2,
 				scale: .5,
 				labelOrigin: new window.google.maps.Point(0,-25),
+
+				...iconStyle
 			},
 			...options
 		});
@@ -171,11 +182,13 @@ export default class GoogleMaps {
 
 	// Hides a marker
 	hideMarker(index) {
+		this.markers[index].isVisible= false;
 		this.markers[index].setMap(null);
 	}
 
 	// Shows a hidden marker
 	showMarker(index) {
+		this.markers[index].isVisible= true;
 		this.markers[index].setMap(this._map);
 	}
 

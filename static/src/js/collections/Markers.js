@@ -1,9 +1,11 @@
 
-import ko from 'knockout';
+// import ko from 'knockout';
 
 export class Markers {
 
-	points= ko.observableArray();
+	// Data about each marker
+	points= [];
+
 
 	constructor(map) {
 		this._map= map;
@@ -20,6 +22,8 @@ export class Markers {
 				lat: data.location.latitude*1,
 				lng: data.location.longitude*1,
 			}
+		}, {
+			strokeColor: '#' + data.ratings.rating_color
 		});
 
 		this.addMarkerWindow(data, marker);
@@ -84,6 +88,11 @@ export class Markers {
 		this.points.splice(index, 1);
 	}
 
+
+	getMarker(index) {
+		return this._map.markers[index];
+	}
+
 	// Hide a marker
 	hideMarker(index) {
 		this._map.hideMarker(index);
@@ -92,6 +101,13 @@ export class Markers {
 	// Show a hidden marker
 	showMarker(index) {
 		this._map.showMarker(index);
+	}
+
+	showWindow(index) {
+
+		const marker= this._map.markers[index];
+
+		marker._infoWindow.open(this._map._map, marker);
 	}
 
 	// Fit to bounds

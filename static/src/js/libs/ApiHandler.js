@@ -29,6 +29,8 @@ export default class ApiHandler {
 			},
 		};
 
-		return fetch(url, options).then( data => data.json() );
+		return fetch(url, options)
+			.then( data => data.json() )
+			.catch(() => {throw new Error('Failed to fetch restaurant data. Try again later.');});
 	}
 }

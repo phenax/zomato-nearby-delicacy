@@ -66,12 +66,12 @@
 		padding: 2em 1em;
 
 		&__item {
+			font-size: .8em;
 
 			&__btn {
 				display: block;
 				width: 100%;
-				font-size: 1em;
-				padding: 1em;
+				padding: 1em .7em;
 				color: #555;
 				text-align: left;
 				background-color: transparent;
@@ -110,7 +110,7 @@
 			bottom: 0;
 			width: 100%;
 			height: $borderSize;
-			background-color: $color_accent;
+			background-color: $color_primary;
 
 			transform: scale(0);
 			transition: transform .2s ease-in-out;

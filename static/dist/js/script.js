@@ -5984,9 +5984,16 @@ var Sidebar = function () {
 		this.isVisible = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observable(false);
 	}
 
+	// The visibility of the sidebar
+
+
+	// Opens the sidebar/menu
 	Sidebar.prototype.openMenu = function openMenu() {
 		this.isVisible(true);
 	};
+
+	// Closes the sidebar/menu (Duh)
+
 
 	Sidebar.prototype.closeMenu = function closeMenu() {
 		this.isVisible(false);
@@ -5995,32 +6002,51 @@ var Sidebar = function () {
 	return Sidebar;
 }();
 
-var SidebarList = function SidebarList() {
-	_classCallCheck(this, SidebarList);
-};
+var SidebarList = function () {
+	function SidebarList() {
+		_classCallCheck(this, SidebarList);
+	}
+
+	/**
+  * When someone clicks on an item in the sidebar
+  * 
+  * @param  {Observable}     $index   The index position observable
+  * @param  {RootViewModel}  $root    The root scope
+  * @param  {Sidebar}        $sidebar The sidebar scope
+  */
+	SidebarList.prototype.itemClickHandler = function itemClickHandler($index, $root, $sidebar) {
+
+		$sidebar.closeMenu();
+
+		$root.listClickHandler($index());
+	};
+
+	return SidebarList;
+}();
 
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_knockout__);
 /* harmony export (binding) */ __webpack_require__.d(exports, "a", function() { return Markers; });
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-
+// import ko from 'knockout';
 
 var Markers = function () {
 	function Markers(map) {
 		_classCallCheck(this, Markers);
 
-		this.points = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observableArray();
+		this.points = [];
 
 		this._map = map;
 	}
 
 	// Wrapper to addMarker in GoogleMaps
+
+
+	// Data about each marker
 
 
 	Markers.prototype.addMarker = function addMarker(data) {
@@ -6033,6 +6059,8 @@ var Markers = function () {
 				lat: data.location.latitude * 1,
 				lng: data.location.longitude * 1
 			}
+		}, {
+			strokeColor: '#' + data.ratings.rating_color
 		});
 
 		this.addMarkerWindow(data, marker);
@@ -6087,6 +6115,10 @@ var Markers = function () {
 		this.points.splice(index, 1);
 	};
 
+	Markers.prototype.getMarker = function getMarker(index) {
+		return this._map.markers[index];
+	};
+
 	// Hide a marker
 
 
@@ -6099,6 +6131,13 @@ var Markers = function () {
 
 	Markers.prototype.showMarker = function showMarker(index) {
 		this._map.showMarker(index);
+	};
+
+	Markers.prototype.showWindow = function showWindow(index) {
+
+		var marker = this._map.markers[index];
+
+		marker._infoWindow.open(this._map._map, marker);
 	};
 
 	// Fit to bounds
@@ -6124,7 +6163,7 @@ var Markers = function () {
 
 
 
-var template = '\n\n\t<div class=\'sidebar__inp-wrap\'>\n\n\t\t<label>\n\n\t\t\t<input\n\t\t\t\ttype=\'text\'\n\t\t\t\tclass=\'sidebar__input\'\n\t\t\t\tplaceholder=\'Search...\'\n\t\t\t\tdata-bind="textInput: $root.searchText"\n\t\t\t/>\n\n\t\t\t<div class=\'sidebar__input--after\'></div>\n\n\t\t</label>\n\n\t</div>\n\n\t<ul\n\t\tclass=\'sidebar__list\'\n\t\tdata-bind="foreach: $root.filteredMarkers">\n\n\t\t<li class=\'sidebar__list__item\'>\n\t\t\t<button class=\'sidebar__list__item__btn\'>\n\t\t\t\t<div data-bind="text: title"></div>\n\t\t\t</button>\n\t\t</li>\n\n\t</ul>\n';
+var template = '\n\n\t<div class=\'sidebar__inp-wrap\'>\n\n\t\t<label>\n\n\t\t\t<input\n\t\t\t\ttype=\'text\'\n\t\t\t\tclass=\'sidebar__input\'\n\t\t\t\tplaceholder=\'Search...\'\n\t\t\t\tdata-bind="textInput: $root.searchText"\n\t\t\t/>\n\n\t\t\t<div class=\'sidebar__input--after\'></div>\n\n\t\t</label>\n\n\t</div>\n\n\t<ul\n\t\tclass=\'sidebar__list\'\n\t\tdata-bind="foreach: $root.filteredMarkers">\n\n\t\t<li class=\'sidebar__list__item\'>\n\t\t\t<button\n\t\t\t\tclass=\'sidebar__list__item__btn\'\n\t\t\t\tdata-bind="click: function() { $parent.itemClickHandler($index, $root, $parents[1]); }">\n\t\t\t\t<div data-bind="text: title"></div>\n\t\t\t</button>\n\t\t</li>\n\n\t</ul>\n';
 
 __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.components.register('fend-sidebar-list', {
 	viewModel: __WEBPACK_IMPORTED_MODULE_1__viewmodels_Sidebar__["b" /* SidebarList */],
@@ -6195,6 +6234,8 @@ var ApiHandler = function () {
 
 		return fetch(url, options).then(function (data) {
 			return data.json();
+		}).catch(function () {
+			throw new Error('Failed to fetch restaurant data. Try again later.');
 		});
 	};
 
@@ -6210,6 +6251,8 @@ var ApiHandler = function () {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mapStyles__ = __webpack_require__(8);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -6235,14 +6278,12 @@ var GoogleMaps = function () {
 		this.loadMapScript();
 	}
 
-	/**
-  * Load the google maps api
-  */
-
-
 	// All markers
 
 
+	/**
+  * Load the google maps api
+  */
 	GoogleMaps.prototype.loadMapScript = function loadMapScript() {
 		var _this = this;
 
@@ -6334,24 +6375,31 @@ var GoogleMaps = function () {
 	/**
   * Create and add a marker to the map
   * 
-  * @param {Object} options  Marker configuration
+  * @param {Object} options    Marker configuration
+  * @param {Object} iconStyle  Marker icon style configuration
+  *
+  * @return {Marker}  The new marker instance
   */
 
 
 	GoogleMaps.prototype.addMarker = function addMarker(options) {
+		var iconStyle = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
 
 		var marker = new window.google.maps.Marker(_extends({
 			map: this._map,
 			clickable: true,
-			icon: {
+			animation: this.ANIMATIONS.DROP,
+			icon: _extends({
 				path: 'M0-48c-9.8 0-17.7 7.8-17.7 17.4 0 15.5 17.7 30.6 17.7 30.6s17.7-15.4 17.7-30.6c0-9.6-7.9-17.4-17.7-17.4z',
-				fillColor: '#fff',
+				fillColor: '#18243B',
 				fillOpacity: 1,
 				strokeColor: '#253691',
 				strokeWeight: 2,
 				scale: .5,
 				labelOrigin: new window.google.maps.Point(0, -25)
-			}
+
+			}, iconStyle)
 		}, options));
 
 		this.markers.push(marker);
@@ -6403,6 +6451,7 @@ var GoogleMaps = function () {
 
 
 	GoogleMaps.prototype.hideMarker = function hideMarker(index) {
+		this.markers[index].isVisible = false;
 		this.markers[index].setMap(null);
 	};
 
@@ -6410,6 +6459,7 @@ var GoogleMaps = function () {
 
 
 	GoogleMaps.prototype.showMarker = function showMarker(index) {
+		this.markers[index].isVisible = true;
 		this.markers[index].setMap(this._map);
 	};
 
@@ -6432,6 +6482,13 @@ var GoogleMaps = function () {
 			}
 		});
 	};
+
+	_createClass(GoogleMaps, [{
+		key: 'ANIMATIONS',
+		get: function get() {
+			return window.google.maps.Animation;
+		}
+	}]);
 
 	return GoogleMaps;
 }();
@@ -6650,14 +6707,35 @@ var Utils = function () {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_knockout__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__viewmodels_Root__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_fend_sidebar__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__components_fend_sidebar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__components_fend_sidebar__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_fend_sidebar_list__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__components_fend_sidebar_list___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__components_fend_sidebar_list__);
+
+
+
+// The good stuff
+
+
+// All components
+
+
+
+// Root binding for the application
+__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_knockout__["applyBindings"])(new __WEBPACK_IMPORTED_MODULE_1__viewmodels_Root__["a" /* default */]());
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_knockout___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_knockout__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__libs_Utils__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__libs_ApiHandler__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__libs_GoogleMaps__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__collections_Markers__ = __webpack_require__(2);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_fend_sidebar__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_fend_sidebar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__components_fend_sidebar__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_fend_sidebar_list__ = __webpack_require__(3);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_fend_sidebar_list___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__components_fend_sidebar_list__);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -6668,15 +6746,14 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 
-// All components
-
-
-
 /**
  * The root viewmodel for the application
  */
 
 var RootViewModel = function () {
+
+	// Initialize the map wrapper
+
 
 	// The input field search text
 
@@ -6691,18 +6768,14 @@ var RootViewModel = function () {
 		this.loading = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observable(true);
 		this.searchText = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observable('');
 		this.filteredMarkers = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observableArray();
+		this.map = new __WEBPACK_IMPORTED_MODULE_3__libs_GoogleMaps__["a" /* default */]();
+		this.markers = new __WEBPACK_IMPORTED_MODULE_4__collections_Markers__["a" /* Markers */](this.map);
 
 
 		// Subscribe to change in the search text
 		this.searchText.subscribe(function (value) {
 			return _this.onInputChange(value);
 		});
-
-		// Initialize the map wrapper
-		this.map = new __WEBPACK_IMPORTED_MODULE_3__libs_GoogleMaps__["a" /* default */]();
-
-		// Initialize the markers wrapper
-		this.markers = new __WEBPACK_IMPORTED_MODULE_4__collections_Markers__["a" /* Markers */](this.map);
 
 		// When the map is ready
 		this.map.ready().then(function () {
@@ -6730,6 +6803,9 @@ var RootViewModel = function () {
 	}
 
 	// Initializes the map and the zomato api
+
+
+	// Initialize the markers wrapper
 
 
 	// The markers that will be rendered to the screen
@@ -6770,6 +6846,8 @@ var RootViewModel = function () {
 
 		console.log(data);
 
+		if (!data || !data.restaurants) throw new Error('Failed to fetch restaurant data from zomato api. Please try again later');
+
 		// Can optimize this but dont wanna ruin readability with a micro-optimization
 		data.restaurants.map(function (data) {
 			return data.restaurant;
@@ -6796,27 +6874,33 @@ var RootViewModel = function () {
 	RootViewModel.prototype.onInputChange = function onInputChange(text) {
 		var _this3 = this;
 
-		this.filteredMarkers(this.markers.points().filter(function (marker, i) {
+		this.filteredMarkers(this.markers.points.filter(function (marker, i) {
 
 			var isAMatch = marker.title.toLowerCase().indexOf(text.toLowerCase()) !== -1;
 
+			var _marker = _this3.markers.getMarker(i);
+
 			if (isAMatch) {
-				_this3.markers.showMarker(i);
+				if (!_marker.isVisible) _this3.markers.showMarker(i);
 			} else {
-				_this3.markers.hideMarker(i);
+				if (_marker.isVisible) _this3.markers.hideMarker(i);
 			}
 
 			return isAMatch;
 		}));
 	};
 
+	RootViewModel.prototype.listClickHandler = function listClickHandler(index) {
+
+		var realIndex = this.markers.points.indexOf(this.filteredMarkers()[index]);
+
+		this.markers.showWindow(realIndex);
+	};
+
 	return RootViewModel;
 }();
 
-// The usuals
-
-
-__WEBPACK_IMPORTED_MODULE_0_knockout___default.a.applyBindings(new RootViewModel());
+/* harmony default export */ exports["a"] = RootViewModel;
 
 /***/ }
 /******/ ]);

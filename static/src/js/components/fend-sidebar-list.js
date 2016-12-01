@@ -28,13 +28,16 @@ const template= `
 		data-bind="foreach: $root.filteredMarkers">
 
 		<li class='sidebar__list__item'>
-			<button class='sidebar__list__item__btn'>
+			<button
+				class='sidebar__list__item__btn'
+				data-bind="click: function() { $parent.itemClickHandler($index, $root, $parents[1]); }">
 				<div data-bind="text: title"></div>
 			</button>
 		</li>
 
 	</ul>
 `;
+
 
 ko.components.register('fend-sidebar-list', {
 	viewModel: SidebarList,
