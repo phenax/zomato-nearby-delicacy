@@ -9,8 +9,6 @@ export default class ApiHandler {
 
 	send(coords, radius) {
 
-		console.log(fetch);
-
 		const url= this.getUrl(coords.lat, coords.lng, radius);
 
 		const options= {

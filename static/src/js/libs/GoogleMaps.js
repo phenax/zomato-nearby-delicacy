@@ -4,43 +4,36 @@ import mapStyles from './mapStyles';
 export default class GoogleMaps {
 
 	API_KEY= 'AIzaSyAjPs0W0u7uHmMEHhJGwZyhTVlEE_5KKso';
-
 	API_URL= 'https://maps.googleapis.com/maps/api/js?key=';
 
 	STYLES= mapStyles;
 
+	markers= [];
+	_onLoadStack= [];
+	_onErrorStack= [];
+
 	constructor() {
-
-		this.markers= [];
-		this._onLoadStack= [];
-
-		console.log(Promise);
 
 		this.loadMapScript();
 	}
 
+
+	/**
+	 * Load the google maps api
+	 */
 	loadMapScript() {
 
 		const $script= document.createElement('script');
 		$script.src= this.API_URL + this.API_KEY;
 
 		$script.onload= () => {
+			this._popCallbackStack(this._onLoadStack);
+			this.loaded= true;
+		};
 
-			let func;
-
-			setTimeout(() => {
-				
-				// Pop all the load stack elems and execute them
-				while((func= this._onLoadStack.pop())) {
-
-					if(typeof func === 'function') {
-						func(this);
-					}
-				}
-				
-				// Script is loaded!
-				this.loaded= true;
-			}, 0);
+		$script.onerror= () => {
+			this._popCallbackStack(this._onErrorStack);
+			this.error= true;
 		};
 
 		// Append the script to the dom
@@ -49,25 +42,59 @@ export default class GoogleMaps {
 
 
 	/**
-	 * Register a callback that will be executed when the script is loaded
+	 * Pop all callbacks in the callback stack and execute them
 	 * 
-	 * @param  {Function} callback  The callback function
+	 * @param  {Stack} stack  The callback stack
 	 */
-	ready(callback) {
+	_popCallbackStack(stack) {
 
-		// If the script has already been loaded, execute the callback directly
-		if(this.loaded) {
-			requestAnimationFrame(() => callback(this));
-			return this;
+		let func;
+
+		while((func= stack.pop())) {
+			if(typeof func === 'function')
+				func();
 		}
-
-		// Else, register it to the onLoad stack
-		this._onLoadStack.push(callback);
-
-		return this;
 	}
 
 
+	/**
+	 * Register a callback that will be executed when the script is loaded
+	 * 
+	 * @return {Promise}            A promise that'll resolve when the google maps api is ready
+	 */
+	ready() {
+
+		return new Promise((resolve, reject) => {
+
+			const error= new Error('Error while loading scripts. Reload to try again.');
+
+			// If the script is already loaded, resolve it right away
+			if(this.loaded) {
+				resolve();
+			} else if(this.error) {
+				reject(error);
+			} else {
+
+				this._onErrorStack.push(() => {
+					reject(error);
+				});
+
+				// Else, register it to the onLoad stack
+				this._onLoadStack.push(() => {
+					resolve();
+				});
+			}
+		});
+	}
+
+
+	/**
+	 * Create a new map
+	 * 
+	 * @param  {LatLng}   center  Coordinates of the center of the map
+	 * @param  {Element}  $hook   The element to attach the map to
+	 * @param  {Number}   zoom    The amount of zoom
+	 */
 	createMap(center, $hook, zoom) {
 
 		this._map= new window.google.maps.Map($hook, {
@@ -75,7 +102,7 @@ export default class GoogleMaps {
 			styles: this.STYLES
 		});
 
-		return self;
+		return this;
 	}
 
 
@@ -86,11 +113,11 @@ export default class GoogleMaps {
 			clickable: true,
 			icon: {
 				path: 'M0-48c-9.8 0-17.7 7.8-17.7 17.4 0 15.5 17.7 30.6 17.7 30.6s17.7-15.4 17.7-30.6c0-9.6-7.9-17.4-17.7-17.4z',
-				fillColor: '#888',
+				fillColor: '#fff',
 				fillOpacity: 1,
 				strokeColor: '#253691',
 				strokeWeight: 2,
-				scale: .8,
+				scale: .5,
 				labelOrigin: new window.google.maps.Point(0,-25),
 			},
 			...options

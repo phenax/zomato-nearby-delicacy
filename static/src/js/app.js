@@ -30,22 +30,19 @@ class RootViewModel {
 
 		this.markers= new Markers(this.map);
 
-		this.map.ready(() => {
+		this.map
+			.ready()
+			.then(() => this.map.getCoordinates())
+			.then( coord => {
 
-			this.loading(false);
+				this._mapInit(coord);
 
-			this.map
-				.getCoordinates()
-				.then( coord => {
-
-					this._mapInit(coord);
-
-					this.onKeyPress('');
-				})
-				.catch( e => {
-					Utils.error(e.message);
-				});
-		});
+				this.onKeyPress('');
+				this.loading(false);
+			})
+			.catch( e => {
+				Utils.error(e.message);
+			});
 	}
 
 	_mapInit(coord) {
