@@ -1,4 +1,5 @@
 
+import mapStyles from './mapStyles';
 
 export default class GoogleMaps {
 
@@ -6,11 +7,14 @@ export default class GoogleMaps {
 
 	API_URL= 'https://maps.googleapis.com/maps/api/js?key=';
 
+	STYLES= mapStyles;
 
 	constructor() {
 
 		this.markers= [];
 		this._onLoadStack= [];
+
+		console.log(Promise);
 
 		this.loadMapScript();
 	}
@@ -67,7 +71,8 @@ export default class GoogleMaps {
 	createMap(center, $hook, zoom) {
 
 		this._map= new window.google.maps.Map($hook, {
-			center, zoom
+			center, zoom,
+			styles: this.STYLES
 		});
 
 		return self;
@@ -78,6 +83,16 @@ export default class GoogleMaps {
 
 		const marker= new window.google.maps.Marker({
 			map: this._map,
+			clickable: true,
+			icon: {
+				path: 'M0-48c-9.8 0-17.7 7.8-17.7 17.4 0 15.5 17.7 30.6 17.7 30.6s17.7-15.4 17.7-30.6c0-9.6-7.9-17.4-17.7-17.4z',
+				fillColor: '#888',
+				fillOpacity: 1,
+				strokeColor: '#253691',
+				strokeWeight: 2,
+				scale: .8,
+				labelOrigin: new window.google.maps.Point(0,-25),
+			},
 			...options
 		});
 

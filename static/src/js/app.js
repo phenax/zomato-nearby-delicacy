@@ -2,10 +2,10 @@
 import ko from 'knockout';
 
 import Utils from './libs/Utils';
-import ApiHandler from './libs/ApiHandler';
+import ZomatoAPI from './libs/ApiHandler';
 import GoogleMaps from './libs/GoogleMaps';
 
-import {Markers} from './collections/Markers';
+import { Markers } from './collections/Markers';
 
 // All components
 import './components/fend-sidebar';
@@ -48,7 +48,6 @@ class RootViewModel {
 		});
 	}
 
-
 	_mapInit(coord) {
 
 		let $hook= document.getElementById('fendMap');
@@ -63,9 +62,9 @@ class RootViewModel {
 
 		this.map.createMap(center, $hook, 16);
 
-		const zomatoAPI= new ApiHandler();
+		const zomato= new ZomatoAPI();
 
-		zomatoAPI
+		zomato
 			.send(center, 1000)
 			.then( data => this._apiResults(data))
 			.catch( e => {
@@ -102,9 +101,7 @@ class RootViewModel {
 			this.markers.points()
 				.filter(
 					marker => 
-						marker.title
-							.toLowerCase()
-							.includes(e.toLowerCase())
+						marker.title.toLowerCase().indexOf(e.toLowerCase()) !== -1
 				)
 		);
 	}

@@ -1,7 +1,4 @@
 
-
-// curl -X GET --header "Accept: application/json" --header "user-key: 4355174366f06b01a4ae777b97d7e70e"
-
 export default class ApiHandler {
 
 	API_KEY= '4355174366f06b01a4ae777b97d7e70e';
@@ -11,6 +8,8 @@ export default class ApiHandler {
 	}
 
 	send(coords, radius) {
+
+		console.log(fetch);
 
 		const url= this.getUrl(coords.lat, coords.lng, radius);
 
@@ -23,7 +22,6 @@ export default class ApiHandler {
 			},
 		};
 
-		return fetch(url, options)
-			.then( data => data.json() );
+		return fetch(url, options).then( data => data.json() );
 	}
 }
