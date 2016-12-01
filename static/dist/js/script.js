@@ -6083,15 +6083,19 @@ var Markers = function () {
 
 		// When you click the marker
 		marker.addListener('click', function () {
-
-			// Hide all other infoWindows
-			_this._map.markers.forEach(function (marker) {
-				return marker._infoWindow.close();
-			});
-
-			// Show this one
-			infoWindow.open(_this._map._map, marker);
+			return _this._displayWindow(marker);
 		});
+	};
+
+	Markers.prototype._displayWindow = function _displayWindow(marker) {
+
+		// Hide all other infoWindows
+		this._map.markers.forEach(function (marker) {
+			return marker._infoWindow.close();
+		});
+
+		// Show this one
+		marker._infoWindow.open(this._map._map, marker);
 	};
 
 	/**
@@ -6137,7 +6141,7 @@ var Markers = function () {
 
 		var marker = this._map.markers[index];
 
-		marker._infoWindow.open(this._map._map, marker);
+		this._displayWindow(marker);
 	};
 
 	// Fit to bounds

@@ -43,15 +43,19 @@ export class Markers {
 		marker._infoWindow= infoWindow;
 
 		// When you click the marker
-		marker.addListener('click', () => {
+		marker.addListener('click', () => this._displayWindow(marker));
+	}
 
-			// Hide all other infoWindows
-			this._map.markers
-				.forEach( marker => marker._infoWindow.close());
 
-			// Show this one
-			infoWindow.open(this._map._map, marker);
-		});
+
+	_displayWindow(marker) {
+
+		// Hide all other infoWindows
+		this._map.markers
+			.forEach( marker => marker._infoWindow.close());
+
+		// Show this one
+		marker._infoWindow.open(this._map._map, marker);
 	}
 
 
@@ -107,7 +111,7 @@ export class Markers {
 
 		const marker= this._map.markers[index];
 
-		marker._infoWindow.open(this._map._map, marker);
+		this._displayWindow(marker);
 	}
 
 	// Fit to bounds
