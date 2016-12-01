@@ -117,8 +117,18 @@ class RootViewModel {
 		this.filteredMarkers(
 			this.markers.points()
 				.filter(
-					marker => 
-						marker.title.toLowerCase().indexOf(text.toLowerCase()) !== -1
+					(marker, i) => {
+
+						const isAMatch= marker.title.toLowerCase().indexOf(text.toLowerCase()) !== -1;
+
+						if(isAMatch) {
+							this.markers.showMarker(i);
+						} else {
+							this.markers.hideMarker(i);
+						}
+
+						return isAMatch;
+					}
 				)
 		);
 	}

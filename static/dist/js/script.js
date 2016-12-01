@@ -6794,9 +6794,19 @@ var RootViewModel = function () {
 
 
 	RootViewModel.prototype.onInputChange = function onInputChange(text) {
+		var _this3 = this;
 
-		this.filteredMarkers(this.markers.points().filter(function (marker) {
-			return marker.title.toLowerCase().indexOf(text.toLowerCase()) !== -1;
+		this.filteredMarkers(this.markers.points().filter(function (marker, i) {
+
+			var isAMatch = marker.title.toLowerCase().indexOf(text.toLowerCase()) !== -1;
+
+			if (isAMatch) {
+				_this3.markers.showMarker(i);
+			} else {
+				_this3.markers.hideMarker(i);
+			}
+
+			return isAMatch;
 		}));
 	};
 
