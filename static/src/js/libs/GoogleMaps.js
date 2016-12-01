@@ -1,6 +1,10 @@
 
 import mapStyles from './mapStyles';
 
+
+/**
+ * Wrapper class for the google maps api
+ */
 export default class GoogleMaps {
 
 	API_KEY= 'AIzaSyAjPs0W0u7uHmMEHhJGwZyhTVlEE_5KKso';
@@ -8,12 +12,15 @@ export default class GoogleMaps {
 
 	STYLES= mapStyles;
 
+	// All markers
 	markers= [];
+
+	// Callback stacks for script loading
 	_onLoadStack= [];
 	_onErrorStack= [];
 
-	constructor() {
 
+	constructor() {
 		this.loadMapScript();
 	}
 
@@ -106,6 +113,11 @@ export default class GoogleMaps {
 	}
 
 
+	/**
+	 * Create and add a marker to the map
+	 * 
+	 * @param {Object} options  Marker configuration
+	 */
 	addMarker(options) {
 
 		const marker= new window.google.maps.Marker({
@@ -129,6 +141,9 @@ export default class GoogleMaps {
 	}
 
 
+	/**
+	 * Fit the map so that all markers are visible
+	 */
 	fitMarkers() {
 
 		const bounds = new window.google.maps.LatLngBounds();
@@ -141,6 +156,11 @@ export default class GoogleMaps {
 	}
 
 
+	/**
+	 * Create an infoWindow
+	 * 
+	 * @param  {String} content  The template for the infowindow
+	 */
 	window(content) {
 
 		return new window.google.maps.InfoWindow({
@@ -149,32 +169,30 @@ export default class GoogleMaps {
 	}
 
 
+	// Hides a marker
 	hideMarker(index) {
 		this.markers[index].setMap(null);
 	}
 
+	// Shows a hidden marker
 	showMarker(index) {
 		this.markers[index].setMap(this._map);
 	}
 
 
-
+	/**
+	 * Get coordinates via geolocation api
+	 * 
+	 * @return {Promise}  Promise that resolves when the user allows geolocation access
+	 */
 	getCoordinates() {
 
 		return new Promise((resolve, reject) => {
 
 			if ('geolocation' in navigator) {
 
-				navigator.geolocation.getCurrentPosition(
-					(position) => {
-
-						resolve(position);
-					},
-					(e) => {
-
-						reject(e);
-					}
-				);
+				navigator.geolocation
+					.getCurrentPosition(resolve, reject);
 
 			} else {
 				reject(new Error('Geolocation Not Supported'));

@@ -6,10 +6,10 @@ export class Markers {
 	points= ko.observableArray();
 
 	constructor(map) {
-
 		this._map= map;
 	}
 
+	// Wrapper to addMarker in GoogleMaps
 	addMarker(data) {
 
 		this.points.push(data);
@@ -26,6 +26,12 @@ export class Markers {
 	}
 
 
+	/**
+	 * Create a infoWindow for a marker
+	 * 
+	 * @param {Object} data    The data to render into the content template
+	 * @param {Marker} marker  The map marker
+	 */
 	addMarkerWindow(data, marker) {
 
 		const infoWindow= this._map.window(this.getContent(data));
@@ -44,6 +50,14 @@ export class Markers {
 		});
 	}
 
+
+	/**
+	 * Render the data into the template string
+	 * 
+	 * @param  {Object} data  The data
+	 * 
+	 * @return {String}       Template content
+	 */
 	getContent(data) {
 
 		return `
@@ -65,19 +79,22 @@ export class Markers {
 	}
 
 
+	// Remove a marker
 	removeMarker(index) {
 		this.points.splice(index, 1);
 	}
 
-
+	// Hide a marker
 	hideMarker(index) {
 		this._map.hideMarker(index);
 	}
 
+	// Show a hidden marker
 	showMarker(index) {
 		this._map.showMarker(index);
 	}
 
+	// Fit to bounds
 	fitMarkers() {
 		this._map.fitMarkers();
 	}

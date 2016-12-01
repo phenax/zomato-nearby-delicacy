@@ -6017,9 +6017,11 @@ var Markers = function () {
 
 		this.points = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observableArray();
 
-
 		this._map = map;
 	}
+
+	// Wrapper to addMarker in GoogleMaps
+
 
 	Markers.prototype.addMarker = function addMarker(data) {
 
@@ -6035,6 +6037,14 @@ var Markers = function () {
 
 		this.addMarkerWindow(data, marker);
 	};
+
+	/**
+  * Create a infoWindow for a marker
+  * 
+  * @param {Object} data    The data to render into the content template
+  * @param {Marker} marker  The map marker
+  */
+
 
 	Markers.prototype.addMarkerWindow = function addMarkerWindow(data, marker) {
 		var _this = this;
@@ -6056,22 +6066,43 @@ var Markers = function () {
 		});
 	};
 
+	/**
+  * Render the data into the template string
+  * 
+  * @param  {Object} data  The data
+  * 
+  * @return {String}       Template content
+  */
+
+
 	Markers.prototype.getContent = function getContent(data) {
 
 		return '\n\t\t\t<div class=\'info-window\'>\n\t\t\t\t<div class=\'info-window__title\'>' + data.title + '</div>\n\t\t\t\t<div class=\'info-window__address\'>' + data.location.address + '</div>\n\t\t\t\t<div class=\'info-window__ratings\' style=\'color: #' + data.ratings.rating_color + ';\'>\n\t\t\t\t\t<span class=\'rating-label\'>' + data.ratings.rating_text + '</span>\n\t\t\t\t\t<span class=\'rating-score\'>' + data.ratings.aggregate_rating + '</span>\n\t\t\t\t</div>\n\t\t\t\t<div class=\'info-window__img\'>\n\t\t\t\t\t<img src=\'' + data.image + '\' alt=\'' + data.title + '\' />\n\t\t\t\t</div>\n\t\t\t\t<div class=\'info-window__menu\'>\n\t\t\t\t\t<a href=\'' + data.menu + '\' target=\'_parent _blank\' rel=\'noopener\'>Go To Menu</a>\n\t\t\t\t</div>\n\t\t\t</div>\n\t\t';
 	};
 
+	// Remove a marker
+
+
 	Markers.prototype.removeMarker = function removeMarker(index) {
 		this.points.splice(index, 1);
 	};
+
+	// Hide a marker
+
 
 	Markers.prototype.hideMarker = function hideMarker(index) {
 		this._map.hideMarker(index);
 	};
 
+	// Show a hidden marker
+
+
 	Markers.prototype.showMarker = function showMarker(index) {
 		this._map.showMarker(index);
 	};
+
+	// Fit to bounds
+
 
 	Markers.prototype.fitMarkers = function fitMarkers() {
 		this._map.fitMarkers();
@@ -6134,9 +6165,20 @@ var ApiHandler = function () {
 		this.API_KEY = '4355174366f06b01a4ae777b97d7e70e';
 	}
 
+	// Returns a templated url for the api
 	ApiHandler.prototype.getUrl = function getUrl(lat, lng, radius) {
 		return 'https://developers.zomato.com/api/v2.1/search?lat=' + lat + '&lon=' + lng + '&radius=' + radius;
 	};
+
+	/**
+  * Send a request to the zomato server and return a Promise
+  * 
+  * @param  {LatLng}  coords  The coordinates of the client
+  * @param  {Number}  radius  The radius of search
+  * 
+  * @return {Promise}         Resolves when it gets a response
+  */
+
 
 	ApiHandler.prototype.send = function send(coords, radius) {
 
@@ -6173,7 +6215,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 
+/**
+ * Wrapper class for the google maps api
+ */
+
 var GoogleMaps = function () {
+
+	// Callback stacks for script loading
 	function GoogleMaps() {
 		_classCallCheck(this, GoogleMaps);
 
@@ -6184,13 +6232,15 @@ var GoogleMaps = function () {
 		this._onLoadStack = [];
 		this._onErrorStack = [];
 
-
 		this.loadMapScript();
 	}
 
 	/**
   * Load the google maps api
   */
+
+
+	// All markers
 
 
 	GoogleMaps.prototype.loadMapScript = function loadMapScript() {
@@ -6281,6 +6331,13 @@ var GoogleMaps = function () {
 		return this;
 	};
 
+	/**
+  * Create and add a marker to the map
+  * 
+  * @param {Object} options  Marker configuration
+  */
+
+
 	GoogleMaps.prototype.addMarker = function addMarker(options) {
 
 		var marker = new window.google.maps.Marker(_extends({
@@ -6302,6 +6359,11 @@ var GoogleMaps = function () {
 		return marker;
 	};
 
+	/**
+  * Fit the map so that all markers are visible
+  */
+
+
 	GoogleMaps.prototype.fitMarkers = function fitMarkers() {
 
 		var bounds = new window.google.maps.LatLngBounds();
@@ -6312,6 +6374,13 @@ var GoogleMaps = function () {
 
 		this._map.fitBounds(bounds);
 	};
+
+	/**
+  * Create an infoWindow
+  * 
+  * @param  {String} content  The template for the infowindow
+  */
+
 
 	GoogleMaps.prototype.window = function (_window) {
 		function window(_x) {
@@ -6330,13 +6399,26 @@ var GoogleMaps = function () {
 		});
 	});
 
+	// Hides a marker
+
+
 	GoogleMaps.prototype.hideMarker = function hideMarker(index) {
 		this.markers[index].setMap(null);
 	};
 
+	// Shows a hidden marker
+
+
 	GoogleMaps.prototype.showMarker = function showMarker(index) {
 		this.markers[index].setMap(this._map);
 	};
+
+	/**
+  * Get coordinates via geolocation api
+  * 
+  * @return {Promise}  Promise that resolves when the user allows geolocation access
+  */
+
 
 	GoogleMaps.prototype.getCoordinates = function getCoordinates() {
 
@@ -6344,13 +6426,7 @@ var GoogleMaps = function () {
 
 			if ('geolocation' in navigator) {
 
-				navigator.geolocation.getCurrentPosition(function (position) {
-
-					resolve(position);
-				}, function (e) {
-
-					reject(e);
-				});
+				navigator.geolocation.getCurrentPosition(resolve, reject);
 			} else {
 				reject(new Error('Geolocation Not Supported'));
 			}
@@ -6596,7 +6672,16 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 
+/**
+ * The root viewmodel for the application
+ */
+
 var RootViewModel = function () {
+
+	// The input field search text
+
+
+	// The title for the app
 	function RootViewModel() {
 		var _this = this;
 
@@ -6608,84 +6693,118 @@ var RootViewModel = function () {
 		this.filteredMarkers = __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.observableArray();
 
 
+		// Subscribe to change in the search text
 		this.searchText.subscribe(function (value) {
-			return _this.onKeyPress(value);
+			return _this.onInputChange(value);
 		});
 
+		// Initialize the map wrapper
 		this.map = new __WEBPACK_IMPORTED_MODULE_3__libs_GoogleMaps__["a" /* default */]();
 
+		// Initialize the markers wrapper
 		this.markers = new __WEBPACK_IMPORTED_MODULE_4__collections_Markers__["a" /* Markers */](this.map);
 
+		// When the map is ready
 		this.map.ready().then(function () {
 			return _this.map.getCoordinates();
-		}).then(function (coord) {
+		}) // Get users coordinates
+		.then(function (coord) {
+			return _this._initializeMap(coord);
+		}) // Initialize the map and zomato api
+		.then(function (rest) {
+			return _this._renderRestaurants(rest);
+		}) // Get the data from the api
+		.then(function () {
+			// Final setup
 
-			_this._mapInit(coord);
+			// Get the filtered list to be all markers
+			_this.onInputChange('');
 
-			_this.onKeyPress('');
+			// Stop the loading spinner
 			_this.loading(false);
 		}).catch(function (e) {
+
+			// If there was an error, display the error message to the user
 			__WEBPACK_IMPORTED_MODULE_1__libs_Utils__["a" /* default */].error(e.message);
 		});
 	}
 
-	RootViewModel.prototype._mapInit = function _mapInit(coord) {
-		var _this2 = this;
+	// Initializes the map and the zomato api
 
+
+	// The markers that will be rendered to the screen
+
+
+	// The loading state of the UI(Loading spinner visibility)
+
+
+	RootViewModel.prototype._initializeMap = function _initializeMap(coord) {
+
+		// Zomato api wrapper
+		var zomato = new __WEBPACK_IMPORTED_MODULE_2__libs_ApiHandler__["a" /* default */]();
+
+		// The DOM Node to display the map in
 		var $hook = document.getElementById('fendMap');
 
+		// Not necessary, just a precaution
 		if ($hook === null) __WEBPACK_IMPORTED_MODULE_1__libs_Utils__["a" /* default */].error('An Error occured. Try reloading the page.');
 
+		// The center for the map should be the coordinates of the client
 		var center = {
 			lat: coord.coords.latitude,
 			lng: coord.coords.longitude
 		};
 
+		// Create a map with the GoogleMaps wrapper
 		this.map.createMap(center, $hook, 16);
 
-		var zomato = new __WEBPACK_IMPORTED_MODULE_2__libs_ApiHandler__["a" /* default */]();
-
-		zomato.send(center, 1000).then(function (data) {
-			return _this2._apiResults(data);
-		}).catch(function (e) {
-			__WEBPACK_IMPORTED_MODULE_1__libs_Utils__["a" /* default */].error(e.message);
-		});
+		// Send a request to the api(Returns a promise)
+		return zomato.send(center, 1000);
 	};
 
-	RootViewModel.prototype._apiResults = function _apiResults(data) {
-		var _this3 = this;
+	// Add restaurant markers to the map
+
+
+	RootViewModel.prototype._renderRestaurants = function _renderRestaurants(data) {
+		var _this2 = this;
 
 		console.log(data);
 
-		data.restaurants.map(function (rest) {
-			return rest.restaurant;
-		}).map(function (rest) {
-			return {
-				title: rest.name,
-				location: rest.location,
-				menu: rest.menu_url,
-				ratings: rest.user_rating,
-				cost_for_two: rest.currency + rest.average_cost_for_two,
-				image: rest.thumb
+		// Can optimize this but dont wanna ruin readability with a micro-optimization
+		data.restaurants.map(function (data) {
+			return data.restaurant;
+		}) // Only the field restaurant is required
+		.map(function (restaurant) {
+			return { // Only the following fields in restaurant required
+				title: restaurant.name,
+				location: restaurant.location,
+				menu: restaurant.menu_url,
+				ratings: restaurant.user_rating,
+				image: restaurant.thumb
 			};
-		}).forEach(function (rest) {
-			return _this3.markers.addMarker(rest);
+		}).forEach(function (restaurant) {
+			return _this2.markers.addMarker(restaurant);
 		});
 
+		// Fit all markers to the screen
 		this.markers.fitMarkers();
-
-		this.onKeyPress('');
 	};
 
-	RootViewModel.prototype.onKeyPress = function onKeyPress(e) {
+	// Triggered whenever the search input field changes value
+
+
+	RootViewModel.prototype.onInputChange = function onInputChange(text) {
 
 		this.filteredMarkers(this.markers.points().filter(function (marker) {
-			return marker.title.toLowerCase().indexOf(e.toLowerCase()) !== -1;
+			return marker.title.toLowerCase().indexOf(text.toLowerCase()) !== -1;
 		}));
 	};
 
 	return RootViewModel;
 }();
+
+// The usuals
+
 
 __WEBPACK_IMPORTED_MODULE_0_knockout___default.a.applyBindings(new RootViewModel());
 
