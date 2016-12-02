@@ -7594,7 +7594,7 @@ var ApiHandler = function () {
 
 		var options = {
 			method: 'GET',
-			mode: 'cors',
+			// mode: 'no-cors',
 			headers: {
 				'Accept': 'application/json',
 				'user-key': this.API_KEY
