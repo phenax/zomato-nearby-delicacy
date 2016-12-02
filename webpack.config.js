@@ -29,6 +29,19 @@ const webpackConfig = {
 		]
 	},
 
+	plugins: [  
+		new webpack.ProvidePlugin({
+			Promise: 'es6-promise',
+			fetch: 'imports?this=>global!exports?global.fetch!whatwg-fetch'
+		})
+	],
+
+	resolve: {
+		modules: [
+			path.resolve('./node_modules')
+		]
+	},
+
 	devtool: 'source-map'
 };
 
@@ -37,6 +50,8 @@ if(process.argv.includes('-p')) {
 	webpackConfig.devtool= false;
 
 	webpackConfig.plugins= [
+		...webpackConfig.plugins,
+
 		new webpack.optimize.DedupePlugin(),
 
 		new webpack.LoaderOptionsPlugin({
