@@ -17,3 +17,8 @@ Search for places to eat in around you in a 1KM radius.
   build:js:prod:  "Build js files for production"
 ```
 
+## Screenshots
+
+![Screenshot #1](https://raw.githubusercontent.com/phenax/nearby-delicacy-fend/master/static/src/screenshot/scrnsht.png)
+
+![Screenshot #2](https://raw.githubusercontent.com/phenax/nearby-delicacy-fend/master/static/src/screenshot/scrnsht2.png)
