@@ -11,13 +11,14 @@
 
 	box-shadow: 0 0 10px 3px rgba(0,0,0,.4);
 
+	font-size: 1em;
+
 	$spinnerSize: 1.6em;
-	$btnPadding: .8em;
 
 	&__menubtn {
 		color: currentColor;
 		font-size: 1.4em;
-		padding: #{$btnPadding};
+		padding: 1.2em;
 		background-color: transparent;
 	}
 

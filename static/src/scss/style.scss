@@ -11,47 +11,6 @@
 	z-index: 0;
 }
 
-.map-icon-label {
-
-	.map-icon {
-		background-color: red;
-	}
-
-}
-
-.message-box {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	width: 100%;
-	z-index: 12;
-
-	font-size: .9em;
-	padding: 1em;
-	text-align: center;
-	color: #fff;
-
-	box-shadow: 0 0 20px 5px rgba(0,0,0,.2);
-
-	cursor: pointer;
-	opacity: 0;
-	pointer-events: none;
-	transition: opacity .2s ease-in-out;
-
-	&.show {
-		opacity: 1;
-		pointer-events: auto;
-	}
-
-	&.error {
-		background-color: #e74c3c;
-	}
-
-	&.info {
-		background-color: #2ecc71;
-	}
-}
-
 .info-window {
 	color: #555;
 	min-height: 200px;
@@ -93,3 +52,39 @@
 		}
 	}
 }
+
+
+
+.message-box {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	width: 100%;
+	z-index: 12;
+
+	font-size: .9em;
+	padding: 1em;
+	text-align: center;
+	color: #fff;
+
+	box-shadow: 0 0 20px 5px rgba(0,0,0,.2);
+
+	cursor: pointer;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity .2s ease-in-out;
+
+	&.show {
+		opacity: 1;
+		pointer-events: auto;
+	}
+
+	&.error {
+		background-color: #e74c3c;
+	}
+
+	&.info {
+		background-color: #2ecc71;
+	}
+}
+
