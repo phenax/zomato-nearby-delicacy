@@ -1,7 +1,7 @@
 # Nearby Delicacy
 Search for places to eat in around you in a 1KM radius.
 
-[Preview](https://htmlpreview.github.io/?https://github.com/phenax/nearby-delicacy-fend/blob/master/static/index.html)
+[Preview](https://phenax.github.io/nearby-delicacy-fend/static/)
 
 
 ## Instructions
