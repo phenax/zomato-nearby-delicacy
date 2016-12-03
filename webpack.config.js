@@ -1,30 +1,26 @@
 const webpack = require('webpack');
 const path = require('path');
 
-const BUILD_DIR= path.resolve(__dirname, 'static/dist/js');    // Build directory
-const APP_DIR= path.resolve(__dirname, 'static/src/js');       // Source directory
+const BUILD_DIR= path.resolve('./static/dist/js');    // Build directory
+const APP_DIR= path.resolve('./static/src/js');       // Source directory
 
 
 const webpackConfig = {
 	
-	entry: {
-
-		script: path.join(APP_DIR, 'app.js'),
-	},
+	entry: path.join(APP_DIR, 'app.js'),
 	
 	output: {
 		path: BUILD_DIR,
-		filename: '[name].js'
+		filename: 'script.js'
 	},
 
 	module: {
 
 		loaders: [
 			{
-				test: /\.js?/,
-				exclude: /node_modules/,
-				include: APP_DIR,
-				loader: 'babel-loader'
+				test: /\.js$/,
+				loader: 'babel-loader',
+				query: { presets: ['es2015', 'stage-0'] }
 			}
 		]
 	},
@@ -36,47 +32,19 @@ const webpackConfig = {
 		})
 	],
 
-	resolve: {
-		modules: [
-			path.resolve('./node_modules')
-		]
-	},
-
 	devtool: 'source-map'
 };
 
 if(process.argv.includes('-p')) {
-	
+
 	webpackConfig.devtool= false;
 
-	webpackConfig.plugins= [
-		...webpackConfig.plugins,
-
-		new webpack.optimize.DedupePlugin(),
-
-		new webpack.LoaderOptionsPlugin({
-			minimize: true,
-			debug: false
-		}),
-		
-		new webpack.optimize.UglifyJsPlugin({
-			minimize: true,
-			compress: {
-				screw_ie8: true,
-				warnings: false
-			},
-			output: {
-				comments: false
-			},
-			sourceMap: false
-		}),
-		
+	webpackConfig.plugins= webpackConfig.plugins || [];
+	webpackConfig.plugins= webpackConfig.plugins.concat([
 		new webpack.DefinePlugin({
-			'process.env': {
-				'NODE_ENV': '"production"'
-			}
+			'process.env': { NODE_ENV: '"production"' }
 		})
-	];
+	]);
 }
 
 module.exports = webpackConfig;
