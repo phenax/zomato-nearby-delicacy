@@ -192,13 +192,13 @@ export default class GoogleMaps {
 	// Hides a marker
 	hideMarker(index) {
 		this.markers[index].isVisible= false;
-		this.markers[index].setMap(null);
+		this.markers[index].setVisible(false);
 	}
 
 	// Shows a hidden marker
 	showMarker(index) {
 		this.markers[index].isVisible= true;
-		this.markers[index].setMap(this._map);
+		this.markers[index].setVisible(true);
 	}
 
 

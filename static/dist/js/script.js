@@ -1890,7 +1890,7 @@
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;/* WEBPACK VAR INJECTION */(function(process, Promise, global) {'use strict';
+	var require;var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, Promise, global) {'use strict';
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
@@ -3478,7 +3478,7 @@
 			key: 'hideMarker',
 			value: function hideMarker(index) {
 				this.markers[index].isVisible = false;
-				this.markers[index].setMap(null);
+				this.markers[index].setVisible(false);
 			}
 	
 			// Shows a hidden marker
@@ -3487,7 +3487,7 @@
 			key: 'showMarker',
 			value: function showMarker(index) {
 				this.markers[index].isVisible = true;
-				this.markers[index].setMap(this._map);
+				this.markers[index].setVisible(true);
 			}
 	
 			/**
