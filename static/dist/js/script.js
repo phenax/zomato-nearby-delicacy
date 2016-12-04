@@ -1241,7 +1241,7 @@
 	
 				var realIndex = this.markers.points.indexOf(this.filteredMarkers()[index]);
 	
-				this.markers.showWindow(realIndex);
+				this.markers.markerClickHandler(this.map.markers[realIndex]);
 			}
 		}]);
 	
@@ -3405,7 +3405,8 @@
 	
 		}, {
 			key: 'addMarker',
-			value: function addMarker(options) {
+			value: function addMarker() {
+				var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 				var iconStyle = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 	
 	
@@ -3741,8 +3742,25 @@
 	
 				// When you click the marker
 				marker.addListener('click', function () {
-					return _this._displayWindow(marker);
+					return _this.markerClickHandler(marker);
 				});
+			}
+	
+			/**
+	   * Marker click handler
+	   */
+	
+		}, {
+			key: 'markerClickHandler',
+			value: function markerClickHandler(marker) {
+	
+				marker.setAnimation(this._map.ANIMATIONS.BOUNCE);
+	
+				this._displayWindow(marker);
+	
+				setTimeout(function () {
+					return marker.setAnimation(null);
+				}, 1000);
 			}
 		}, {
 			key: '_displayWindow',

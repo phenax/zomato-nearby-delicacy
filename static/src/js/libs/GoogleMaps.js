@@ -135,7 +135,7 @@ export default class GoogleMaps {
 	 *
 	 * @return {Marker}  The new marker instance
 	 */
-	addMarker(options, iconStyle={}) {
+	addMarker(options={}, iconStyle={}) {
 
 		const marker= new window.google.maps.Marker({
 			map: this._map,

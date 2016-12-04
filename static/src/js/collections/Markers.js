@@ -43,9 +43,21 @@ export class Markers {
 		marker._infoWindow= infoWindow;
 
 		// When you click the marker
-		marker.addListener('click', () => this._displayWindow(marker));
+		marker.addListener('click', () => this.markerClickHandler(marker));
 	}
 
+
+	/**
+	 * Marker click handler
+	 */
+	markerClickHandler(marker) {
+
+		marker.setAnimation(this._map.ANIMATIONS.BOUNCE);
+
+		this._displayWindow(marker);
+
+		setTimeout(() => marker.setAnimation(null), 1000);
+	}
 
 
 	_displayWindow(marker) {

@@ -147,7 +147,6 @@ export default class RootViewModel {
 
 		const realIndex= this.markers.points.indexOf(this.filteredMarkers()[index]);
 
-		this.markers.showWindow(realIndex);
+		this.markers.markerClickHandler(this.map.markers[realIndex]);
 	}
-
 }
