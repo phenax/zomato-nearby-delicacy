@@ -1270,8 +1270,6 @@
 	
 	var Utils = function () {
 		function Utils() {
-			var _this = this;
-	
 			_classCallCheck(this, Utils);
 	
 			this.messageBox = {
@@ -1284,43 +1282,60 @@
 			};
 	
 	
-			setInterval(function () {
-				console.log(_this.messageBox.type());
-			}, 1000);
-	
 			this.hideTextBox = this.hideTextBox.bind(this);
 			this.showError = this.showError.bind(this);
-			this.showMessage = this.showMessage.bind(this);
+			this.showInfo = this.showInfo.bind(this);
 		}
+	
+		// Hides the message box at the bottom
+	
+	
+		// Message box properties
+	
 	
 		_createClass(Utils, [{
 			key: 'hideTextBox',
 			value: function hideTextBox() {
 				this.messageBox.visible(false);
 			}
+	
+			// Display an error to the user
+	
 		}, {
 			key: 'showError',
 			value: function showError(message) {
 	
 				this.messageBox.type('error');
-				this.messageBox.text(message);
+				this.showMessage(message);
+			}
 	
-				this.messageBox.visible(true);
+			// Display a message to the user
+	
+		}, {
+			key: 'showInfo',
+			value: function showInfo(message) {
+	
+				this.messageBox.type('info');
+				this.showMessage(message);
 			}
 		}, {
 			key: 'showMessage',
 			value: function showMessage(message) {
 	
-				this.messageBox.type('info');
 				this.messageBox.text(message);
-	
 				this.messageBox.visible(true);
 			}
+	
+			// Check if the message type is error
+	
 		}, {
 			key: 'isError',
 			value: function isError() {
 				return this.messageBox.type() === 'error';
 			}
+	
+			// Check if the message type is info
+	
 		}, {
 			key: 'isInfo',
 			value: function isInfo() {
