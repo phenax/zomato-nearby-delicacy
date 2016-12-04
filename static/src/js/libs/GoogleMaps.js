@@ -35,6 +35,16 @@ export default class GoogleMaps {
 	 */
 	loadMapScript() {
 
+		// 
+		// Adding the script tag dynamically makes the browser 
+		//  load the script asynchronously and gets executed when
+		//  theres nothing left to block.
+		// Also, the api key being inside the script makes it difficult
+		//  for others to directly steal api key quota
+		// And, now I can handle errors in loading the script tag directly
+		// And, the google maps api is called only when all the initial 
+		//  setup script is done executing
+		// 
 		const $script= document.createElement('script');
 		$script.src= this.API_URL + this.API_KEY;
 
@@ -48,7 +58,6 @@ export default class GoogleMaps {
 			this.error= true;
 		};
 
-		// Append the script to the dom
 		document.body.appendChild($script);
 	}
 

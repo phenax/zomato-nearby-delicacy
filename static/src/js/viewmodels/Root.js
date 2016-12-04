@@ -31,6 +31,7 @@ export default class RootViewModel {
 	// Initialize the markers wrapper
 	markers= new Markers(this.map);
 
+	// Logging utilities
 	util= Utils;
 
 
@@ -41,7 +42,8 @@ export default class RootViewModel {
 			.subscribe( value => this.onInputChange(value) );
 
 		// When the map is ready
-		this.map.ready()
+		this.map
+			.ready()
 			.then(() => this.map.getCoordinates())        // Get users coordinates
 			.then(coord => this._initializeMap(coord))    // Initialize the map and zomato api
 			.then(rest => this._renderRestaurants(rest))  // Get the data from the api
@@ -59,6 +61,7 @@ export default class RootViewModel {
 				Utils.showError(e.message);
 			});
 	}
+
 
 	// Initializes the map and the zomato api
 	_initializeMap(coord) {
@@ -119,13 +122,12 @@ export default class RootViewModel {
 		this.filteredMarkers(
 			this.markers.points
 				.filter(
-					(marker, i) => {
+					(point, i) => {
 
-						const isAMatch= marker.title.toLowerCase().indexOf(text.toLowerCase()) !== -1;
+						const isAMatch= point.title.toLowerCase().indexOf(text.toLowerCase()) !== -1;
 
 						const _marker= this.markers.getMarker(i);
 
-						// TODO: Add marker animation
 						if(isAMatch) {
 							if(!_marker.isVisible)
 								this.markers.showMarker(i);

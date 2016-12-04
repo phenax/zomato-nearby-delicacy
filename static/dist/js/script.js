@@ -1144,6 +1144,9 @@
 		// Initializes the map and the zomato api
 	
 	
+		// Logging utilities
+	
+	
 		// Initialize the map wrapper
 	
 	
@@ -1217,13 +1220,12 @@
 			value: function onInputChange(text) {
 				var _this3 = this;
 	
-				this.filteredMarkers(this.markers.points.filter(function (marker, i) {
+				this.filteredMarkers(this.markers.points.filter(function (point, i) {
 	
-					var isAMatch = marker.title.toLowerCase().indexOf(text.toLowerCase()) !== -1;
+					var isAMatch = point.title.toLowerCase().indexOf(text.toLowerCase()) !== -1;
 	
 					var _marker = _this3.markers.getMarker(i);
 	
-					// TODO: Add marker animation
 					if (isAMatch) {
 						if (!_marker.isVisible) _this3.markers.showMarker(i);
 					} else {
@@ -1888,7 +1890,7 @@
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var require;var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, Promise, global) {'use strict';
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;/* WEBPACK VAR INJECTION */(function(process, Promise, global) {'use strict';
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
@@ -3295,6 +3297,16 @@
 			value: function loadMapScript() {
 				var _this = this;
 	
+				// 
+				// Adding the script tag dynamically makes the browser 
+				//  load the script asynchronously and gets executed when
+				//  theres nothing left to block.
+				// Also, the api key being inside the script makes it difficult
+				//  for others to directly steal api key quota
+				// And, now I can handle errors in loading the script tag directly
+				// And, the google maps api is called only when all the initial 
+				//  setup script is done executing
+				// 
 				var $script = document.createElement('script');
 				$script.src = this.API_URL + this.API_KEY;
 	
@@ -3308,7 +3320,6 @@
 					_this.error = true;
 				};
 	
-				// Append the script to the dom
 				document.body.appendChild($script);
 			}
 	
