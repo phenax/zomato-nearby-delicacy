@@ -1,43 +1,49 @@
-let $messageBox= document.querySelector('.js-message-box');
 
-$messageBox.addEventListener('click', () => {
-	Utils.hide();
-});
+import ko from 'knockout';
 
-export default class Utils {
+class Utils {
 
-	static hide() {
+	messageBox= {
 
-		$messageBox.classList.remove('error');
-		$messageBox.classList.remove('info');
+		text: ko.observable(''),
 
-		$messageBox.classList.remove('show');
+		type: ko.observable(''),
+
+		visible: ko.observable(false)
+	};
+
+
+	constructor() {
+
+		setInterval(() => { console.log(this.messageBox.type()); }, 1000);
+
+		this.hideTextBox= this.hideTextBox.bind(this);
+		this.showError= this.showError.bind(this);
+		this.showMessage= this.showMessage.bind(this);
 	}
 
-	static delayHide(time) {
-
-		setTimeout(() => Utils.hide(), time);
+	hideTextBox() {
+		this.messageBox.visible(false);
 	}
 
-	static error(message) {
+	showError(message) {
 
-		if(!$messageBox)
-			console.error(message);
+		this.messageBox.type('error');
+		this.messageBox.text(message);
 
-		$messageBox.textContent= message;
-		$messageBox.classList.add('error');
-		$messageBox.classList.add('show');
+		this.messageBox.visible(true);
 	}
 
-	static message(message) {
+	showMessage(message) {
 
-		if(!$messageBox)
-			console.log(message);
+		this.messageBox.type('info');
+		this.messageBox.text(message);
 
-		$messageBox.textContent= message;
-		$messageBox.classList.add('info');
-		$messageBox.classList.add('show');
-
-		// delayHide(5000);
+		this.messageBox.visible(true);
 	}
+
+	isError() { return this.messageBox.type() === 'error'; }
+	isInfo() { return this.messageBox.type() === 'info'; }
 }
+
+export default new Utils();

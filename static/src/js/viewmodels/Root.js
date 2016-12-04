@@ -31,6 +31,8 @@ export default class RootViewModel {
 	// Initialize the markers wrapper
 	markers= new Markers(this.map);
 
+	util= Utils;
+
 
 	constructor() {
 
@@ -54,7 +56,7 @@ export default class RootViewModel {
 			.catch( e => {
 
 				// If there was an error, display the error message to the user
-				Utils.error(e.message);
+				Utils.showError(e.message);
 			});
 	}
 
@@ -69,7 +71,7 @@ export default class RootViewModel {
 
 		// Not necessary, just a precaution
 		if($hook === null)
-			Utils.error('An Error occured. Try reloading the page.');
+			Utils.showError('An Error occured. Try reloading the page.');
 
 		// The center for the map should be the coordinates of the client
 		const center= {
@@ -123,6 +125,7 @@ export default class RootViewModel {
 
 						const _marker= this.markers.getMarker(i);
 
+						// TODO: Add marker animation
 						if(isAMatch) {
 							if(!_marker.isVisible)
 								this.markers.showMarker(i);
@@ -144,4 +147,5 @@ export default class RootViewModel {
 
 		this.markers.showWindow(realIndex);
 	}
+
 }

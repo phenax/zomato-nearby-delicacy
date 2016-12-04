@@ -16,8 +16,19 @@
 
 <div class="map" id="fendMap"></div>
 
-<div class='message-box js-message-box'></div>
+<div
+	class="message-box"
+	data-bind="
+		text: util.messageBox.text, 
+		css: {
+			'show': util.messageBox.visible,
+			'error': util.isError(),
+			'info': util.isInfo()
+		},
+		click: util.hideTextBox
+	">
+</div>
 
-<script async defer src='./dist/js/script.js'></script>
+<script async defer src="./dist/js/script.js"></script>
 </body>
 </html>
