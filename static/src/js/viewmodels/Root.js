@@ -41,22 +41,7 @@ export default class RootViewModel {
 		this.searchText
 			.subscribe( value => this.onInputChange(value) );
 
-		let currentNetworkState= false; 
-
-		Utils
-			.networkStatus(1000)
-			.online(() => {
-				if(!currentNetworkState) {
-					Utils.hideTextBox();
-					currentNetworkState= true;
-				}
-			})
-			.offline(() => {
-				if(currentNetworkState) {
-					Utils.showError('You are not connected to the internet');
-					currentNetworkState= false;
-				}
-			});
+		this._addNetworkStateListener();
 
 		// When the map is ready
 		this.map
@@ -77,6 +62,17 @@ export default class RootViewModel {
 				// If there was an error, display the error message to the user
 				Utils.showError(e.message);
 			});
+	}
+
+
+	// Adds network status listeners
+	_addNetworkStateListener() {
+
+		// Check status every 1 second and when it switches state, 
+		// either of the two get triggered
+		Utils.networkStatus(1000)
+			.online(() => Utils.hideTextBox())
+			.offline(() => Utils.showError('You are not connected to the internet'));
 	}
 
 

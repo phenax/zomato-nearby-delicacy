@@ -20,37 +20,49 @@ class Utils {
 		this.showInfo= this.showInfo.bind(this);
 	}
 
-
 	networkStatus(timeout) {
 
-		const stackRunner= (stack) => {
-			stack.forEach( cb => cb() );
-		};
-
 		// Wanted a promise implementation that resolves 
-		// everytime its called
-		const miniPromise= {
+		// everytime its called. So.... mini promise.
+		// 
+		// Is there another way to do this with a promise-like syntax?
+		const network= {
+
+			state: false,
 
 			succCBStack: [],
 
 			errorCBStack: [],
 
+			_stackRunner: (stack) => stack.forEach( cb => cb()),
+
 			online(cb) {
 				this.succCBStack.push(cb);
 				return this;
 			},
+
 			offline(cb) {
 				this.errorCBStack.push(cb);
 				return this;
-			}
+			},
+
+			resolve() {
+				if(!this.state) {
+					this._stackRunner(this.succCBStack);
+					this.state= true;
+				}
+			},
+			reject() {
+				if(this.state) {
+					this._stackRunner(this.errorCBStack);
+					this.state= false;
+				}
+			},
 		};
 
-		const resolve= () => stackRunner(miniPromise.succCBStack);
-		const reject= () => stackRunner(miniPromise.errorCBStack);
+		setInterval(() => (navigator.onLine)? network.resolve(): network.reject(), timeout);
 
-		setInterval(() => (navigator.onLine)? resolve(): reject(), timeout);
-
-		return Object.freeze(miniPromise);
+		return network;
 	}
 
 

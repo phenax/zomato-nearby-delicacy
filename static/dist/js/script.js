@@ -1116,19 +1116,7 @@
 				return _this.onInputChange(value);
 			});
 	
-			var currentNetworkState = false;
-	
-			_Utils2.default.networkStatus(1000).online(function () {
-				if (!currentNetworkState) {
-					_Utils2.default.hideTextBox();
-					currentNetworkState = true;
-				}
-			}).offline(function () {
-				if (currentNetworkState) {
-					_Utils2.default.showError('You are not connected to the internet');
-					currentNetworkState = false;
-				}
-			});
+			this._addNetworkStateListener();
 	
 			// When the map is ready
 			this.map.ready().then(function () {
@@ -1155,7 +1143,7 @@
 			});
 		}
 	
-		// Initializes the map and the zomato api
+		// Adds network status listeners
 	
 	
 		// Logging utilities
@@ -1171,6 +1159,21 @@
 	
 	
 		_createClass(RootViewModel, [{
+			key: '_addNetworkStateListener',
+			value: function _addNetworkStateListener() {
+	
+				// Check status every 1 second and when it switches state, 
+				// either of the two get triggered
+				_Utils2.default.networkStatus(1000).online(function () {
+					return _Utils2.default.hideTextBox();
+				}).offline(function () {
+					return _Utils2.default.showError('You are not connected to the internet');
+				});
+			}
+	
+			// Initializes the map and the zomato api
+	
+		}, {
 			key: '_initializeMap',
 			value: function _initializeMap(coord) {
 	
@@ -1310,19 +1313,23 @@
 			key: 'networkStatus',
 			value: function networkStatus(timeout) {
 	
-				var stackRunner = function stackRunner(stack) {
-					stack.forEach(function (cb) {
-						return cb();
-					});
-				};
-	
 				// Wanted a promise implementation that resolves 
-				// everytime its called
-				var miniPromise = {
+				// everytime its called. So.... mini promise.
+				// 
+				// Is there another way to do this with a promise-like syntax?
+				var network = {
+	
+					state: false,
 	
 					succCBStack: [],
 	
 					errorCBStack: [],
+	
+					_stackRunner: function _stackRunner(stack) {
+						return stack.forEach(function (cb) {
+							return cb();
+						});
+					},
 	
 					online: function online(cb) {
 						this.succCBStack.push(cb);
@@ -1331,21 +1338,26 @@
 					offline: function offline(cb) {
 						this.errorCBStack.push(cb);
 						return this;
+					},
+					resolve: function resolve() {
+						if (!this.state) {
+							this._stackRunner(this.succCBStack);
+							this.state = true;
+						}
+					},
+					reject: function reject() {
+						if (this.state) {
+							this._stackRunner(this.errorCBStack);
+							this.state = false;
+						}
 					}
 				};
 	
-				var resolve = function resolve() {
-					return stackRunner(miniPromise.succCBStack);
-				};
-				var reject = function reject() {
-					return stackRunner(miniPromise.errorCBStack);
-				};
-	
 				setInterval(function () {
-					return navigator.onLine ? resolve() : reject();
+					return navigator.onLine ? network.resolve() : network.reject();
 				}, timeout);
 	
-				return Object.freeze(miniPromise);
+				return network;
 			}
 	
 			// Hides the message box at the bottom
@@ -3355,10 +3367,14 @@
 				// 
 				// Adding the script tag dynamically makes the browser 
 				//  load the script asynchronously and gets executed when
-				//  theres nothing left to block.
+				//  theres nothing left to block.(Because the execution of this 
+				//  script is defered)
+				//  
 				// Also, the api key being inside the script makes it difficult
 				//  for others to directly steal api key quota
+				//  
 				// And, now I can handle errors in loading the script tag directly
+				// 
 				// And, the google maps api is called only when all the initial 
 				//  setup script is done executing
 				// 

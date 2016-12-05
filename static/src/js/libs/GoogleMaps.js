@@ -38,10 +38,14 @@ export default class GoogleMaps {
 		// 
 		// Adding the script tag dynamically makes the browser 
 		//  load the script asynchronously and gets executed when
-		//  theres nothing left to block.
+		//  theres nothing left to block.(Because the execution of this 
+		//  script is defered)
+		//  
 		// Also, the api key being inside the script makes it difficult
 		//  for others to directly steal api key quota
+		//  
 		// And, now I can handle errors in loading the script tag directly
+		// 
 		// And, the google maps api is called only when all the initial 
 		//  setup script is done executing
 		// 
