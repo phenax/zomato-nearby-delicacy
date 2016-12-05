@@ -35,8 +35,6 @@ const template= `
 `;
 
 
-
-
 ko.components.register('fend-sidebar', {
 	template,
 	viewModel: Sidebar,

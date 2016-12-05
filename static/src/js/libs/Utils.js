@@ -20,6 +20,41 @@ class Utils {
 		this.showInfo= this.showInfo.bind(this);
 	}
 
+
+	networkStatus(timeout) {
+
+		const stackRunner= (stack) => {
+			stack.forEach( cb => cb() );
+		};
+
+		// Wanted a promise implementation that resolves 
+		// everytime its called
+		const miniPromise= {
+
+			succCBStack: [],
+
+			errorCBStack: [],
+
+			online(cb) {
+				this.succCBStack.push(cb);
+				return this;
+			},
+			offline(cb) {
+				this.errorCBStack.push(cb);
+				return this;
+			}
+		};
+
+		const resolve= () => stackRunner(miniPromise.succCBStack);
+		const reject= () => stackRunner(miniPromise.errorCBStack);
+
+		setInterval(() => (navigator.onLine)? resolve(): reject(), timeout);
+
+		return Object.freeze(miniPromise);
+	}
+
+
+
 	// Hides the message box at the bottom
 	hideTextBox() {
 		this.messageBox.visible(false);

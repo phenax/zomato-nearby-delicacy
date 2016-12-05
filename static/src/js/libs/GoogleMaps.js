@@ -85,9 +85,9 @@ export default class GoogleMaps {
 	 */
 	ready() {
 
-		return new Promise((resolve, reject) => {
+		const error= new Error('Error while loading the google maps API. Reload to try again.');
 
-			const error= new Error('Error while loading scripts. Reload to try again.');
+		return new Promise((resolve, reject) => {
 
 			// If the script is already loaded, resolve it right away
 			if(this.loaded) {

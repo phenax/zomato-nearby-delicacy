@@ -1116,6 +1116,20 @@
 				return _this.onInputChange(value);
 			});
 	
+			var currentNetworkState = false;
+	
+			_Utils2.default.networkStatus(1000).online(function () {
+				if (!currentNetworkState) {
+					_Utils2.default.hideTextBox();
+					currentNetworkState = true;
+				}
+			}).offline(function () {
+				if (currentNetworkState) {
+					_Utils2.default.showError('You are not connected to the internet');
+					currentNetworkState = false;
+				}
+			});
+	
 			// When the map is ready
 			this.map.ready().then(function () {
 				return _this.map.getCoordinates();
@@ -1289,13 +1303,54 @@
 			this.showInfo = this.showInfo.bind(this);
 		}
 	
-		// Hides the message box at the bottom
-	
-	
 		// Message box properties
 	
 	
 		_createClass(Utils, [{
+			key: 'networkStatus',
+			value: function networkStatus(timeout) {
+	
+				var stackRunner = function stackRunner(stack) {
+					stack.forEach(function (cb) {
+						return cb();
+					});
+				};
+	
+				// Wanted a promise implementation that resolves 
+				// everytime its called
+				var miniPromise = {
+	
+					succCBStack: [],
+	
+					errorCBStack: [],
+	
+					online: function online(cb) {
+						this.succCBStack.push(cb);
+						return this;
+					},
+					offline: function offline(cb) {
+						this.errorCBStack.push(cb);
+						return this;
+					}
+				};
+	
+				var resolve = function resolve() {
+					return stackRunner(miniPromise.succCBStack);
+				};
+				var reject = function reject() {
+					return stackRunner(miniPromise.errorCBStack);
+				};
+	
+				setInterval(function () {
+					return navigator.onLine ? resolve() : reject();
+				}, timeout);
+	
+				return Object.freeze(miniPromise);
+			}
+	
+			// Hides the message box at the bottom
+	
+		}, {
 			key: 'hideTextBox',
 			value: function hideTextBox() {
 				this.messageBox.visible(false);
@@ -1890,7 +1945,7 @@
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var require;var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(process, Promise, global) {'use strict';
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;/* WEBPACK VAR INJECTION */(function(process, Promise, global) {'use strict';
 	
 	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 	
@@ -3351,9 +3406,9 @@
 			value: function ready() {
 				var _this2 = this;
 	
-				return new Promise(function (resolve, reject) {
+				var error = new Error('Error while loading the google maps API. Reload to try again.');
 	
-					var error = new Error('Error while loading scripts. Reload to try again.');
+				return new Promise(function (resolve, reject) {
 	
 					// If the script is already loaded, resolve it right away
 					if (_this2.loaded) {

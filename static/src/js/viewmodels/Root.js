@@ -41,13 +41,30 @@ export default class RootViewModel {
 		this.searchText
 			.subscribe( value => this.onInputChange(value) );
 
+		let currentNetworkState= false; 
+
+		Utils
+			.networkStatus(1000)
+			.online(() => {
+				if(!currentNetworkState) {
+					Utils.hideTextBox();
+					currentNetworkState= true;
+				}
+			})
+			.offline(() => {
+				if(currentNetworkState) {
+					Utils.showError('You are not connected to the internet');
+					currentNetworkState= false;
+				}
+			});
+
 		// When the map is ready
 		this.map
 			.ready()
-			.then(() => this.map.getCoordinates())        // Get users coordinates
-			.then(coord => this._initializeMap(coord))    // Initialize the map and zomato api
-			.then(rest => this._renderRestaurants(rest))  // Get the data from the api
-			.then(() => {                                 // Final setup
+			.then(()    => this.map.getCoordinates())        // Get users coordinates
+			.then(coord => this._initializeMap(coord))       // Initialize the map and zomato api
+			.then(rest  => this._renderRestaurants(rest))    // Get the data from the api
+			.then(()    => {                                 // Final setup
 
 				// Get the filtered list to be all markers
 				this.onInputChange('');
