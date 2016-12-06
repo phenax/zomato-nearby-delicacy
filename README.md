@@ -1,7 +1,7 @@
 # Nearby Delicacy
 Search for places to eat in around you in a 1KM radius.
 
-[Preview](https://phenax.github.io/nearby-delicacy-fend/static/)
+[Preview](https://phenax.github.io/zomato-nearby-delicacy/static/)
 
 
 ## Instructions
@@ -19,6 +19,6 @@ Search for places to eat in around you in a 1KM radius.
 
 ## Screenshots
 
-![Screenshot #1](https://raw.githubusercontent.com/phenax/nearby-delicacy-fend/master/static/src/screenshot/scrnsht.png)
+![Screenshot #1](https://raw.githubusercontent.com/phenax/zomato-nearby-delicacy/master/static/src/screenshot/scrnsht.png)
 
-![Screenshot #2](https://raw.githubusercontent.com/phenax/nearby-delicacy-fend/master/static/src/screenshot/scrnsht2.png)
+![Screenshot #2](https://raw.githubusercontent.com/phenax/zomato-nearby-delicacy/master/static/src/screenshot/scrnsht2.png)
