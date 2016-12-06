@@ -28,7 +28,7 @@ class Utils {
 		// Is there another way to do this with a promise-like syntax?
 		const network= {
 
-			state: false,
+			state: true,
 
 			succCBStack: [],
 

@@ -41,8 +41,6 @@ export default class RootViewModel {
 		this.searchText
 			.subscribe( value => this.onInputChange(value) );
 
-		this._addNetworkStateListener();
-
 		// When the map is ready
 		this.map
 			.ready()
@@ -62,7 +60,10 @@ export default class RootViewModel {
 				// If there was an error, display the error message to the user
 				Utils.showError(e.message);
 			});
+
+		this._addNetworkStateListener();
 	}
+
 
 
 	// Adds network status listeners
