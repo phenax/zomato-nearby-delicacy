@@ -1,4 +1,6 @@
 # Nearby Delicacy
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/phenax/zomato-nearby-delicacy.svg)](https://greenkeeper.io/)
 Search for places to eat in around you in a 1KM radius.
 
 [Preview](https://phenax.github.io/zomato-nearby-delicacy/static/)
